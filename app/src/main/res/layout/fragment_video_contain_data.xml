@@ -1,0 +1,285 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".fragment.VideoContainDataFragment"
+    >
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:id="@+id/ll_display_desc"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/_6sdp"
+                android:layout_marginRight="@dimen/_6sdp"
+                android:layout_marginTop="@dimen/_12sdp"
+                android:clickable="true"
+                android:focusable="true"
+                android:background="?android:attr/selectableItemBackground"
+                android:weightSum="10"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="8"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tv_title_video_play"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:lineSpacingExtra="@dimen/_2sdp"
+                        android:layout_marginBottom="@dimen/_1sdp"
+                        android:textStyle="bold"
+                        android:textColor="@color/black"
+                        android:maxLines="2"
+                        android:ellipsize="end"
+                        android:textSize="@dimen/_12sdp"/>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/tv_view_video_play"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/_3sdp"
+                            android:textSize="@dimen/_10sdp"
+                            android:text="hello mn"
+                            />
+                        <TextView
+                            android:id="@+id/tv_time_video_play"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/_3sdp"
+                            android:textSize="@dimen/_10sdp"
+                            />
+
+                    </LinearLayout>
+
+
+                </LinearLayout>
+
+                <ImageView
+                    android:id="@+id/iv_down_arrow"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:src="@drawable/baseline_arrow_drop_down_black_36" />
+
+
+            </LinearLayout>
+
+            <com.google.android.material.bottomnavigation.BottomNavigationView
+                android:id="@+id/bnv_play_video_select"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_45sdp"
+                android:layout_marginTop="@dimen/_6sdp"
+                app:itemBackground="@color/white"
+                app:itemIconTint="@color/grey"
+                app:itemTextColor="@color/grey"
+                app:labelVisibilityMode="labeled"
+                android:background="@drawable/custom_button_transparent"
+                app:menu="@menu/menu_play_video_select"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_1sdp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginTop="@dimen/_6sdp"
+                app:layout_constraintTop_toBottomOf="@id/bnv_play_video_select"
+                android:background="@color/line_horizontal"/>
+
+            <RelativeLayout
+                android:id="@+id/rl_channel_click"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_40sdp"
+                android:gravity="center_vertical"
+                android:clickable="true"
+                android:focusable="true"
+                android:background="?android:attr/selectableItemBackground">
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/civ_image_logo_channel"
+                    android:layout_width="@dimen/_30sdp"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentStart="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="@dimen/_6sdp"
+                    android:src="@drawable/baseline_download_for_offline_black_48" />
+
+                <RelativeLayout
+                    android:id="@+id/rl_group_title_and_sub"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_centerVertical="true"
+                    android:layout_toLeftOf="@+id/bt_subscribe"
+                    android:layout_toRightOf="@id/civ_image_logo_channel">
+
+                    <TextView
+                        android:id="@+id/tv_title_channel_video"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:layout_marginLeft="@dimen/_6sdp"
+                        android:layout_marginTop="@dimen/_3sdp"
+                        android:ellipsize="end"
+                        android:maxLines="1"
+                        android:textColor="@color/grey"
+                        android:textSize="@dimen/_12sdp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/tv_subscription"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/tv_title_channel_video"
+                        android:layout_alignParentLeft="true"
+                        android:layout_marginLeft="@dimen/_6sdp"
+                        android:text="289k subscription"
+                        android:textSize="@dimen/_12sdp" />
+
+                </RelativeLayout>
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/bt_subscribe"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginRight="@dimen/_3sdp"
+                    android:background="@drawable/custom_button_transparent"
+                    android:text="SUBSCRIBE"
+                    android:textColor="@color/red"
+                    android:textSize="@dimen/_13sdp" />
+
+            </RelativeLayout>
+
+            <View
+                android:id="@+id/v_line_horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_1sdp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/bt_subscribe"
+                android:layout_marginTop="@dimen/_1sdp"
+                android:orientation="vertical"
+                android:background="@color/line_horizontal"/>
+
+            <LinearLayout
+                android:id="@+id/ll_comment_group"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/v_line_horizontal"
+                android:layout_marginTop="@dimen/_6sdp"
+                android:layout_marginLeft="@dimen/_6sdp"
+                android:layout_marginRight="@dimen/_6sdp"
+                android:clickable="true"
+                android:focusable="true"
+                android:background="?android:attr/selectableItemBackground"
+                android:orientation="vertical">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical">
+
+                    <TextView
+                        android:id="@+id/tv_name_comment_count_video"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Bình luận "
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/_12sdp" />
+
+                    <TextView
+                        android:id="@+id/tv_comment_count_video"
+                        android:layout_width="@dimen/_200sdp"
+                        android:layout_height="match_parent"
+                        android:layout_toRightOf="@id/tv_name_comment_count_video"
+                        android:text="52"
+                        android:textSize="@dimen/_12sdp" />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/baseline_unfold_more_black_18"
+                        android:layout_alignParentEnd="true"/>
+                </RelativeLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_3sdp"
+                    android:orientation="horizontal"
+                    android:gravity="center">
+
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:id="@+id/civ_logo_channel_user"
+                        android:layout_width="@dimen/_22sdp"
+                        android:layout_height="match_parent"
+                        android:src="@drawable/baseline_home_black_48"/>
+                    <TextView
+                        android:id="@+id/tv_comment_video"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginLeft="@dimen/_3sdp"
+                        android:layout_marginRight="@dimen/_6sdp"
+                        android:textSize="@dimen/_10sdp"
+                        android:textColor="@color/black"
+                        android:maxLines="2"
+                        android:ellipsize="end"
+                        android:text="Bây giờ ở phiên bản Android Studio mới hơn tạo mới dự án là có sẵn android x chứ không có tùy chọn thêm hay không thêm"/>
+
+                </LinearLayout>
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/tv_comment_off"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_16sdp"
+                android:visibility="gone"
+                android:textColor="@color/black"
+                android:gravity="center_vertical"
+                android:text="@string/tv_name_comment_turnoff"/>
+
+            <View
+                android:id="@+id/ll_line_horizontal_3"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/_1sdp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/ll_comment_group"
+                android:layout_marginTop="@dimen/_6sdp"
+                android:background="@color/grey"/>
+
+            <FrameLayout
+                android:id="@+id/fl_related_video"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+    <include layout="@layout/fragment_bottom_sheet_desc"/>
+    <include layout="@layout/fragment_bottom_sheet_comment"/>
+    <include layout="@layout/fragment_bottom_sheet_detail_replies"/>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
