@@ -34,6 +34,7 @@
             android:ellipsize="end"
             android:maxWidth="@dimen/_150sdp"
             android:maxLines="1"
+
             android:text="Liên Xô • "
             android:textSize="@dimen/_11sdp" />
 
@@ -43,10 +44,10 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_6sdp"
             android:layout_toRightOf="@id/tv_author_name"
-            android:paddingTop="@dimen/_2sdp"
-            android:text="4 tuần trước"
             android:textColor="@color/black"
-            android:textSize="@dimen/_10sdp" />
+            android:textSize="@dimen/_11sdp"
+            android:text="4 tuần trước"
+             />
 
         <TextView
             android:id="@+id/tv_editor"
@@ -75,9 +76,10 @@
             android:layout_toRightOf="@id/civ_logo_author"
             android:ellipsize="end"
             android:maxLines="5"
-            android:text="vô tình nghe được ở story facebook của một người bạn và phải mò qua đây nghe bản full vì quá hay"
             android:textColor="@color/black"
-            android:textSize="@dimen/_10sdp" />
+            android:textSize="@dimen/_10sdp"
+            android:text="vô tình nghe được ở story facebook của một người bạn và phải mò qua đây nghe bản full vì quá hay"
+            />
 
         <ImageButton
             android:id="@+id/ib_like_cmt"
@@ -116,11 +118,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/tv_cmt_content"
-            android:layout_toRightOf="@id/ib_dislike_cmt"
             android:layout_marginLeft="@dimen/_45sdp"
             android:layout_marginTop="@dimen/_12sdp"
-            android:src="@drawable/baseline_comment_black_18"
-            android:background="@drawable/custom_button_transparent"/>
+            android:layout_toRightOf="@id/ib_dislike_cmt"
+            android:background="@drawable/custom_button_transparent"
+            android:src="@drawable/baseline_comment_black_18" />
 
         <TextView
             android:id="@+id/tv_replies_count"

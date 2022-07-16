@@ -7,30 +7,78 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
+    android:elevation="@dimen/_4sdp"
     tools:context=".activitys.VideoPlayActivity"
     app:behavior_hideable="true"
     app:behavior_peekHeight="0dp"
-    app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
-
-    <fragment
-        android:id="@+id/fm_youtube_play_view"
+    app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
+    >
+    <LinearLayout
+        android:id="@+id/ll_video_play"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintHeight_percent="0.35"
+        android:orientation="horizontal"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:name="com.google.android.youtube.player.YouTubePlayerFragment"/>
+        app:layout_constraintHeight_percent="0.35">
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <fragment
+                android:id="@+id/fm_youtube_play_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:name="com.google.android.youtube.player.YouTubePlayerFragment"
+                app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
+                />
+        </FrameLayout>
 
-    <FrameLayout
-        android:id="@+id/fl_content_data"
+        <LinearLayout
+            android:id="@+id/ll_resize2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone">
+            <TextView
+                android:id="@+id/tv_title_video_resize"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:text="Đêm đà lạt"/>
+
+            <TextView
+                android:id="@+id/tv_title_channel_resize"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="ậksda"/>
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/iv_delete_resize"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:visibility="gone"
+            android:src="@drawable/baseline_close_black_24"/>
+
+    </LinearLayout>
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintHeight_percent="0.65"
+        android:orientation="vertical"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/fm_youtube_play_view"/>
+        app:layout_constraintTop_toBottomOf="@id/ll_video_play"
+        app:layout_constraintHeight_percent="0.65">
+
+        <FrameLayout
+            android:id="@+id/fl_content_data"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </LinearLayout>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

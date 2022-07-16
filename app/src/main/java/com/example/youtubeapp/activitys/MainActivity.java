@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -17,10 +18,13 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.youtubeapp.R;
@@ -67,10 +71,17 @@ public class MainActivity extends AppCompatActivity implements YouTubePlayer.OnI
     LibraryFragment libraryFragment = new LibraryFragment();
     FrameLayout flContent;
     AppBarLayout ablHome;
+    NestedScrollView nsvVideo;
+
+    LinearLayout llResize;
+    TextView tvTitleVideo, tvTitleChannel;
+    ImageView ivDelete;
+    String titleVideo = "", titleChannel  = "";
 
     ConstraintLayout clVideoPlay;
     BottomSheetBehavior sheetBehavior;
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -84,6 +95,32 @@ public class MainActivity extends AppCompatActivity implements YouTubePlayer.OnI
         // Bottom sheet để mở video play
         clVideoPlay = findViewById(R.id.cl_video_play);
         sheetBehavior = BottomSheetBehavior.from(clVideoPlay);
+        llResize = findViewById(R.id.ll_resize2);
+        tvTitleChannel = findViewById(R.id.tv_title_channel_resize);
+        tvTitleVideo = findViewById(R.id.tv_title_video_resize);
+        ivDelete = findViewById(R.id.iv_delete_resize);
+//        nsvVideo = findViewById(R.id.nsv_scroll_play_video);
+//        nsvVideo.setOnTouchListener(new View.OnTouchListener() {
+//            @Override
+//            public boolean onTouch(View v, MotionEvent event) {
+//                int action = event.getAction();
+//                switch (action) {
+//                    case MotionEvent.ACTION_DOWN:
+//                        // Disallow NestedScrollView to intercept touch events.
+//                        v.getParent().requestDisallowInterceptTouchEvent(true);
+//                        break;
+//
+//                    case MotionEvent.ACTION_UP:
+//                        // Allow NestedScrollView to intercept touch events.
+//                        v.getParent().requestDisallowInterceptTouchEvent(false);
+//                        break;
+//                }
+//
+//                // Handle RecyclerView touch events.
+//                v.onTouchEvent(event);
+//                return true;
+//            }
+//        });
 
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.fl_content, homeFragment, Util.TAG_HOME);
@@ -160,6 +197,8 @@ public class MainActivity extends AppCompatActivity implements YouTubePlayer.OnI
             }
         });
 
+
+
     }
 
 
@@ -229,20 +268,34 @@ public class MainActivity extends AppCompatActivity implements YouTubePlayer.OnI
     ////////////////////////////////////////////////////////////////////////////////
     //   Video Play
 
+    public void setVisibleResize() {
+        llResize.setVisibility(View.VISIBLE);
+        ivDelete.setVisibility(View.VISIBLE);
+    }
+
+    public void setDisableResize() {
+        llResize.setVisibility(View.GONE);
+        ivDelete.setVisibility(View.GONE);
+    }
+
 
     String idVideo;
     YouTubePlayerFragment youTubePlayerFragment;
 
     public void setDataVideoPlay(String idVideoS, VideoItem itemVideo, SearchItem itemVideoS) {
         if(sheetBehavior.getState() != BottomSheetBehavior.STATE_EXPANDED){
-            setToolBarMainInvisible();
-            bnvFragment.setVisibility(View.GONE);
+
             idVideo = idVideoS;
             addFragmentMain(itemVideo, itemVideoS);
+
+            tvTitleVideo.setText(titleVideo);
+            tvTitleChannel.setText(titleChannel);
+
             youTubePlayerFragment = (YouTubePlayerFragment) getFragmentManager()
                     .findFragmentById(R.id.fm_youtube_play_view);
             youTubePlayerFragment.initialize(Util.API_KEY, this);
             sheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+//            sheetBehavior.setDraggable(false);
 
             sheetBehavior.addBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
                 @Override
@@ -250,27 +303,29 @@ public class MainActivity extends AppCompatActivity implements YouTubePlayer.OnI
                     switch (newState) {
                         case BottomSheetBehavior.STATE_DRAGGING:
 
-                            Toast.makeText(MainActivity.this, "Ok", Toast.LENGTH_SHORT).show();
                             break;
                         case BottomSheetBehavior.STATE_EXPANDED:
+                            bnvFragment.setVisibility(View.GONE);
+                            setDisableResize();
                             ViewGroup.LayoutParams paramss = (ViewGroup.LayoutParams )youTubePlayerFragment.getView().getLayoutParams();
                             int width = getResources().getDisplayMetrics().widthPixels;
                             int height = getResources().getDisplayMetrics().heightPixels;
-                            paramss.height = 600;
+                            paramss.height = (int) (height*0.35);
                             paramss.width = width;
                             youTubePlayerFragment.getView().setLayoutParams(paramss);
-                            Toast.makeText(MainActivity.this, "Ok", Toast.LENGTH_SHORT).show();
                             break;
                         case BottomSheetBehavior.STATE_COLLAPSED:
-                            setToolBarMainVisible();
+                            bnvFragment.setVisibility(View.VISIBLE);
+                            setVisibleResize();
                             ViewGroup.LayoutParams params = (ViewGroup.LayoutParams )youTubePlayerFragment.getView().getLayoutParams();
-                            params.height = 300;
+                            params.height = 290;
                             params.width = 550;
                             youTubePlayerFragment.getView().setLayoutParams(params);
-                            sheetBehavior.setPeekHeight(300);
+                            sheetBehavior.setPeekHeight(450);
                             break;
                         case BottomSheetBehavior.STATE_HIDDEN:
                             youTubePlayerFragment.onDestroy();
+                            setDisableResize();
                             break;
 
                     }
@@ -282,6 +337,9 @@ public class MainActivity extends AppCompatActivity implements YouTubePlayer.OnI
                 }
             });
 
+
+        } else if (sheetBehavior.getState() == BottomSheetBehavior.STATE_COLLAPSED){
+            sheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
         } else {
             sheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
         }
@@ -296,9 +354,16 @@ public class MainActivity extends AppCompatActivity implements YouTubePlayer.OnI
         if (itemVideo != null && itemVideoS == null) {
                 bundle.putSerializable(Util.BUNDLE_EXTRA_OBJECT_ITEM_VIDEO, itemVideo);
                 bundle.putString(Util.EXTRA_KEY_ITEM_VIDEO, "Video");
+
+                titleVideo = itemVideo.getTvTitleVideo();
+                titleChannel = itemVideo.getTvTitleChannel();
+
         } else {
-            bundle.putSerializable(Util.BUNDLE_EXTRA_OBJECT_ITEM_VIDEO, itemVideoS);
-            bundle.putString(Util.EXTRA_KEY_ITEM_VIDEO, "Search");
+                bundle.putSerializable(Util.BUNDLE_EXTRA_OBJECT_ITEM_VIDEO, itemVideoS);
+                bundle.putString(Util.EXTRA_KEY_ITEM_VIDEO, "Search");
+
+                titleVideo = itemVideoS.getTvTitleVideo();
+                titleChannel = itemVideoS.getTitleChannel();
         }
 
         videoContainDataFragment.setArguments(bundle);

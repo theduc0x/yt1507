@@ -74,7 +74,7 @@
         <entry key="..\:/Users/ADMIN/AndroidStudioProjects/Tuan4Android/YoutubeApp/app/src/main/res/menu/menu_voice_search.xml" value="0.428125" />
         <entry key="..\:/Users/ADMIN/AndroidStudioProjects/Tuan4Android/YoutubeApp/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.2335" />
         <entry key="..\:/Yotube137/youtube127/app/src/main/res/drawable/custom_button_transparent.xml" value="0.169" />
-        <entry key="..\:/Yotube137/youtube127/app/src/main/res/layout/activity_channel.xml" value="0.425" />
+        <entry key="..\:/Yotube137/youtube127/app/src/main/res/layout/activity_channel.xml" value="0.22" />
         <entry key="..\:/Yotube137/youtube127/app/src/main/res/layout/activity_main.xml" value="0.17" />
         <entry key="..\:/Yotube137/youtube127/app/src/main/res/layout/activity_video_play.xml" value="0.425" />
         <entry key="..\:/Yotube137/youtube127/app/src/main/res/layout/activity_video_play_list.xml" value="0.425" />
@@ -118,6 +118,12 @@
         <entry key="..\:/Yotube137/youtube127/app/src/main/res/layout/item_video_in_playlist.xml" value="0.425" />
         <entry key="..\:/Yotube137/youtube127/app/src/main/res/layout/item_video_shorts.xml" value="0.25" />
         <entry key="..\:/Yotube137/youtube127/app/src/main/res/menu/menu_toolbar.xml" value="0.425" />
+        <entry key="..\:/Yotube137/youtube167chuachinhsua/app/src/main/res/layout/activity_main.xml" value="0.20871327254305977" />
+        <entry key="..\:/Yotube137/youtube167chuachinhsua/app/src/main/res/layout/activity_video_play.xml" value="0.20871327254305977" />
+        <entry key="..\:/Yotube137/youtube167chuachinhsua/app/src/main/res/layout/fragment_related_to_video.xml" value="0.20871327254305977" />
+        <entry key="..\:/Yotube137/youtube167chuachinhsua/app/src/main/res/layout/fragment_video_contain_data.xml" value="0.4270833333333333" />
+        <entry key="..\:/Yotube137/youtube167chuachinhsua/app/src/main/res/layout/item_comment_video.xml" value="0.20871327254305977" />
+        <entry key="..\:/Yotube137/youtube167chuachinhsua/app/src/main/res/layout/item_replies_comment_video.xml" value="0.20871327254305977" />
         <entry key="..\:/Youtube17/youtube17/app/src/main/res/drawable-mdpi/custom_click_category.xml" value="0.108" />
         <entry key="..\:/Youtube17/youtube17/app/src/main/res/drawable/custom_button_sort_by.xml" value="0.1" />
         <entry key="..\:/Youtube17/youtube17/app/src/main/res/drawable/custom_category.xml" value="0.12" />

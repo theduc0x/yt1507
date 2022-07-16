@@ -1,5 +1,6 @@
 package com.example.youtubeapp.fragment;
 
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Build;
@@ -10,6 +11,7 @@ import androidx.appcompat.widget.AppCompatButton;
 import androidx.appcompat.widget.PopupMenu;
 import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -22,6 +24,7 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
@@ -70,6 +73,7 @@ public class VideoContainDataFragment extends Fragment {
     CircleImageView civLogoChannel, civLogoUser;
     TextView tvTitleChannelVideo, tvSubscription, tvCommentCount, tvCmtContent;
     AppCompatButton btSubscribe;
+    NestedScrollView nsvVideo;
     // Biến dùng chung
     String idVideo, titleVideo, titleChannel;
     String viewCount;
@@ -125,6 +129,7 @@ public class VideoContainDataFragment extends Fragment {
 
 
 
+    @SuppressLint("ClickableViewAccessibility")
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -172,6 +177,28 @@ public class VideoContainDataFragment extends Fragment {
                         break;
                 }
                 return false;
+            }
+        });
+
+        nsvVideo.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                int action = event.getAction();
+                switch (action) {
+                    case MotionEvent.ACTION_DOWN:
+                        // Disallow NestedScrollView to intercept touch events.
+                        v.getParent().requestDisallowInterceptTouchEvent(true);
+                        break;
+
+                    case MotionEvent.ACTION_UP:
+                        // Allow NestedScrollView to intercept touch events.
+                        v.getParent().requestDisallowInterceptTouchEvent(false);
+                        break;
+                }
+
+                // Handle RecyclerView touch events.
+                v.onTouchEvent(event);
+                return true;
             }
         });
 
@@ -279,6 +306,7 @@ public class VideoContainDataFragment extends Fragment {
         tvCmtContent = view.findViewById(R.id.tv_comment_video);
         rlOpenChannel = view.findViewById(R.id.rl_channel_click);
         tvTurnOffComment = view.findViewById(R.id.tv_comment_off);
+        nsvVideo = view.findViewById(R.id.nsv_scroll_play_video);
 
         // BottomSheet Desc
         clBSDesc = view.findViewById(R.id.cl_bottom_sheet_desc);
@@ -389,7 +417,9 @@ public class VideoContainDataFragment extends Fragment {
         tvViewVideoPlay.setText(viewCount + " views • ");
         tvTimeVideoPlay.setText(dateDayDiff);
 //        tvCommentCount.setText(Util.convertViewCount(Double.parseDouble(commentCount)));
-        tvCommentCount.setText(Util.convertViewCount(Double.parseDouble(commentCount)));
+        if (commentCount != null) {
+            tvCommentCount.setText(Util.convertViewCount(Double.parseDouble(commentCount)));
+        }
         if (likeCount == null) {
             likeCount = "";
             bnvOption.getMenu().findItem(R.id.mn_like).setTitle("Like");
