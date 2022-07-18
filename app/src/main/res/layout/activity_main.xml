@@ -44,7 +44,7 @@
                 android:id="@+id/fl_content"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginBottom="@dimen/mb_50dp">
+                android:layout_marginBottom="@dimen/_40sdp">
             </FrameLayout>
     </LinearLayout>
 

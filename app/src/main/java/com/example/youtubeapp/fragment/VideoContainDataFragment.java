@@ -34,6 +34,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.youtubeapp.R;
+import com.example.youtubeapp.activitys.MainActivity;
 import com.example.youtubeapp.activitys.VideoPlayActivity;
 import com.example.youtubeapp.adapter.CommentYoutubeAdapter;
 import com.example.youtubeapp.adapter.RepliesCommentAdapter;
@@ -74,6 +75,8 @@ public class VideoContainDataFragment extends Fragment {
     TextView tvTitleChannelVideo, tvSubscription, tvCommentCount, tvCmtContent;
     AppCompatButton btSubscribe;
     NestedScrollView nsvVideo;
+    NestedScrollView nsvGroupDesc;
+    MainActivity mainActivity;
     // Biến dùng chung
     String idVideo, titleVideo, titleChannel;
     String viewCount;
@@ -173,7 +176,6 @@ public class VideoContainDataFragment extends Fragment {
                 switch (item.getItemId()) {
                     case R.id.mn_close_replies:
                         sheetBehaviorCmt.setState(BottomSheetBehavior.STATE_COLLAPSED);
-                        sheetBehaviorRep.setState(BottomSheetBehavior.STATE_COLLAPSED);
                         break;
                 }
                 return false;
@@ -181,8 +183,10 @@ public class VideoContainDataFragment extends Fragment {
         });
 
         nsvVideo.setOnTouchListener(new View.OnTouchListener() {
+
             @Override
             public boolean onTouch(View v, MotionEvent event) {
+                mainActivity.setDraggable(false);
                 int action = event.getAction();
                 switch (action) {
                     case MotionEvent.ACTION_DOWN:
@@ -193,15 +197,14 @@ public class VideoContainDataFragment extends Fragment {
                     case MotionEvent.ACTION_UP:
                         // Allow NestedScrollView to intercept touch events.
                         v.getParent().requestDisallowInterceptTouchEvent(false);
+
                         break;
                 }
-
                 // Handle RecyclerView touch events.
                 v.onTouchEvent(event);
                 return true;
             }
         });
-
 
         return view;
     }
@@ -307,6 +310,8 @@ public class VideoContainDataFragment extends Fragment {
         rlOpenChannel = view.findViewById(R.id.rl_channel_click);
         tvTurnOffComment = view.findViewById(R.id.tv_comment_off);
         nsvVideo = view.findViewById(R.id.nsv_scroll_play_video);
+        nsvGroupDesc = view.findViewById(R.id.nsv_scroll_group);
+        mainActivity = (MainActivity) getActivity();
 
         // BottomSheet Desc
         clBSDesc = view.findViewById(R.id.cl_bottom_sheet_desc);
@@ -451,7 +456,7 @@ public class VideoContainDataFragment extends Fragment {
                 @Override
                 public void onClick(View v) {
                     if(sheetBehaviorCmt.getState() != BottomSheetBehavior.STATE_EXPANDED){
-                        resetData();
+//                        resetData();
                         setDataComment();
                         LoadPage = 1;
                         sheetBehaviorCmt.setState(BottomSheetBehavior.STATE_EXPANDED);
@@ -557,6 +562,9 @@ public class VideoContainDataFragment extends Fragment {
     }
     // Load dữ liệu của page tiếp theo
     private void loadNextPage() {
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
                 if (LoadPage == 1) {
                     callApiComment(idVideo, pageToken, "relevance", "10");
                     isLoading = false;
@@ -564,6 +572,9 @@ public class VideoContainDataFragment extends Fragment {
                     callApiComment(idVideo, pageToken, "time", "10");
                     isLoading = false;
                 }
+            }
+        },500);
+
     }
 
     private void callApiComment(String id, String nextPageToken, String order, String maxResults) {
@@ -684,8 +695,11 @@ public class VideoContainDataFragment extends Fragment {
     }
     private void resetData() {
         currenPage = 1;
-        listCmtItem = null;
+        listCmtItem = new ArrayList<>();
+        isLoading = false;
+        isLastPage = false;
         pageToken = "";
+        totalPage = 5;
         listAddS = new ArrayList<>();
         listAddS.add(new CommentItem(""));
     }
@@ -694,7 +708,10 @@ public class VideoContainDataFragment extends Fragment {
 
     private void resetDataR() {
         currentPageR = 1;
-        listReplies = null;
+        listReplies = new ArrayList<>();
+        isLoadingR = false;
+        isLastPageR = false;
+        totalPageR = 5;
         pageTokenR = "";
         listAddSR = new ArrayList<>();
         listAddSR.add(new RepliesCommentItem());
@@ -706,19 +723,19 @@ public class VideoContainDataFragment extends Fragment {
         }
         parentId = itemR.getIdComment();
 
-        int cmtCountD = Integer.valueOf(itemR.getTotalReplyCount());
-        if (cmtCountD % 10 != 0) {
-            totalPageR = (cmtCountD / 10) + 1;
+        int cmtCountR = Integer.valueOf(itemR.getTotalReplyCount());
+        if (cmtCountR % 10 != 0) {
+            totalPageR = (cmtCountR / 10) + 1;
         } else {
-            totalPageR = (cmtCountD / 10);
+            totalPageR = (cmtCountR / 10);
         }
+        Log.d("next", totalPageR+"");
 
         LinearLayoutManager linearLayoutManager =
                 new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false);
         rvListReplies.setLayoutManager(linearLayoutManager);
         adapterReplies = new RepliesCommentAdapter(itemR);
         rvListReplies.setAdapter(adapterReplies);
-        rvListReplies.setNestedScrollingEnabled(false);
 
         setFirstDataPo();
 
@@ -757,8 +774,14 @@ public class VideoContainDataFragment extends Fragment {
     }
     // Load dữ liệu của page tiếp theo
     private void loadNextPageR() {
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
                 callApiReplies(pageTokenR, parentId, "10");
                 isLoadingR = false;
+            }
+        },500);
+
     }
 
 
@@ -797,7 +820,6 @@ public class VideoContainDataFragment extends Fragment {
                                 .getTextDisplay();
                         likeCount = String.valueOf(listItem.get(i).getSnippet()
                                 .getLikeCount());
-                        Log.d("asfdafsf", likeCount);
                         listAddR.add(new RepliesCommentItem(
                                 displayContentCmt, authorName, authorLogoUrl,
                                 authorIdChannel, likeCount, publishAt, updateAt
@@ -814,6 +836,7 @@ public class VideoContainDataFragment extends Fragment {
                         adapterReplies.notifyDataSetChanged();
                     }
                     setProgressBarR();
+
                 }
 
             }

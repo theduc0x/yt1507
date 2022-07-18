@@ -74,6 +74,7 @@ public class MainActivity extends AppCompatActivity implements YouTubePlayer.OnI
     NestedScrollView nsvVideo;
 
     LinearLayout llResize;
+    LinearLayout llVideoPlay;
     TextView tvTitleVideo, tvTitleChannel;
     ImageView ivDelete;
     String titleVideo = "", titleChannel  = "";
@@ -92,6 +93,7 @@ public class MainActivity extends AppCompatActivity implements YouTubePlayer.OnI
         bnvFragment.setVisibility(View.VISIBLE);
         flContent = findViewById(R.id.fl_content);
         ablHome = findViewById(R.id.abl_nav);
+        nsvVideo = findViewById(R.id.ll_video_play);
         // Bottom sheet để mở video play
         clVideoPlay = findViewById(R.id.cl_video_play);
         sheetBehavior = BottomSheetBehavior.from(clVideoPlay);
@@ -99,28 +101,6 @@ public class MainActivity extends AppCompatActivity implements YouTubePlayer.OnI
         tvTitleChannel = findViewById(R.id.tv_title_channel_resize);
         tvTitleVideo = findViewById(R.id.tv_title_video_resize);
         ivDelete = findViewById(R.id.iv_delete_resize);
-//        nsvVideo = findViewById(R.id.nsv_scroll_play_video);
-//        nsvVideo.setOnTouchListener(new View.OnTouchListener() {
-//            @Override
-//            public boolean onTouch(View v, MotionEvent event) {
-//                int action = event.getAction();
-//                switch (action) {
-//                    case MotionEvent.ACTION_DOWN:
-//                        // Disallow NestedScrollView to intercept touch events.
-//                        v.getParent().requestDisallowInterceptTouchEvent(true);
-//                        break;
-//
-//                    case MotionEvent.ACTION_UP:
-//                        // Allow NestedScrollView to intercept touch events.
-//                        v.getParent().requestDisallowInterceptTouchEvent(false);
-//                        break;
-//                }
-//
-//                // Handle RecyclerView touch events.
-//                v.onTouchEvent(event);
-//                return true;
-//            }
-//        });
 
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.fl_content, homeFragment, Util.TAG_HOME);
@@ -189,7 +169,6 @@ public class MainActivity extends AppCompatActivity implements YouTubePlayer.OnI
                 switch (item.getItemId()) {
                     case R.id.mn_search:
                         addFragmentSearch("");
-
                         break;
 
                 }
@@ -197,10 +176,14 @@ public class MainActivity extends AppCompatActivity implements YouTubePlayer.OnI
             }
         });
 
-
-
+        nsvVideo.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                sheetBehavior.setDraggable(true);
+                return false;
+            }
+        });
     }
-
 
     // Phương thức chọn fragment khi click menu
     private void selectFragment(Fragment fragment, String tag, String tagBackStack) {
@@ -222,7 +205,6 @@ public class MainActivity extends AppCompatActivity implements YouTubePlayer.OnI
         fragmentTransaction.replace(R.id.fl_content, searchFragment, "fragSearch");
         fragmentTransaction.addToBackStack("SearchFragment");
         fragmentTransaction.commit();
-
     }
 
     @Override
@@ -283,66 +265,86 @@ public class MainActivity extends AppCompatActivity implements YouTubePlayer.OnI
     YouTubePlayerFragment youTubePlayerFragment;
 
     public void setDataVideoPlay(String idVideoS, VideoItem itemVideo, SearchItem itemVideoS) {
+        Log.d("pause", sheetBehavior.getState() + "");
+//        if (sheetBehavior.getState() == BottomSheetBehavior.STATE_COLLAPSED) {
+//            sheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+//
+//            eventPlay(idVideoS, itemVideo, itemVideoS);
+//        } else
+//        sheetBehavior.setState(STATE);
         if(sheetBehavior.getState() != BottomSheetBehavior.STATE_EXPANDED){
 
-            idVideo = idVideoS;
-            addFragmentMain(itemVideo, itemVideoS);
-
-            tvTitleVideo.setText(titleVideo);
-            tvTitleChannel.setText(titleChannel);
-
-            youTubePlayerFragment = (YouTubePlayerFragment) getFragmentManager()
-                    .findFragmentById(R.id.fm_youtube_play_view);
-            youTubePlayerFragment.initialize(Util.API_KEY, this);
-            sheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
-//            sheetBehavior.setDraggable(false);
-
-            sheetBehavior.addBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
-                @Override
-                public void onStateChanged(@NonNull View bottomSheet, int newState) {
-                    switch (newState) {
-                        case BottomSheetBehavior.STATE_DRAGGING:
-
-                            break;
-                        case BottomSheetBehavior.STATE_EXPANDED:
-                            bnvFragment.setVisibility(View.GONE);
-                            setDisableResize();
-                            ViewGroup.LayoutParams paramss = (ViewGroup.LayoutParams )youTubePlayerFragment.getView().getLayoutParams();
-                            int width = getResources().getDisplayMetrics().widthPixels;
-                            int height = getResources().getDisplayMetrics().heightPixels;
-                            paramss.height = (int) (height*0.35);
-                            paramss.width = width;
-                            youTubePlayerFragment.getView().setLayoutParams(paramss);
-                            break;
-                        case BottomSheetBehavior.STATE_COLLAPSED:
-                            bnvFragment.setVisibility(View.VISIBLE);
-                            setVisibleResize();
-                            ViewGroup.LayoutParams params = (ViewGroup.LayoutParams )youTubePlayerFragment.getView().getLayoutParams();
-                            params.height = 290;
-                            params.width = 550;
-                            youTubePlayerFragment.getView().setLayoutParams(params);
-                            sheetBehavior.setPeekHeight(450);
-                            break;
-                        case BottomSheetBehavior.STATE_HIDDEN:
-                            youTubePlayerFragment.onDestroy();
-                            setDisableResize();
-                            break;
-
-                    }
-                }
-
-                @Override
-                public void onSlide(@NonNull View bottomSheet, float slideOffset) {
-
-                }
-            });
-
-
+            eventPlay(idVideoS, itemVideo, itemVideoS);
         } else if (sheetBehavior.getState() == BottomSheetBehavior.STATE_COLLAPSED){
             sheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
         } else {
             sheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
         }
+    }
+    // Khi đang thu nhỏ video và click bên Home thì sẽ hủy player view đang chạy
+    public void setResetVideo() {
+            sheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+            if (youTubePlayerFragment != null) {
+                youTubePlayerFragment.onDestroy();
+            }
+        setDisableResize();
+    }
+    public void setDraggable(boolean set) {
+        sheetBehavior.setDraggable(set);
+    }
+
+    private void eventPlay(String idVideoS, VideoItem itemVideo, SearchItem itemVideoS) {
+        idVideo = idVideoS;
+        addFragmentMain(itemVideo, itemVideoS);
+
+        tvTitleVideo.setText(titleVideo);
+        tvTitleChannel.setText(titleChannel);
+        youTubePlayerFragment = (YouTubePlayerFragment) getFragmentManager()
+                .findFragmentById(R.id.fm_youtube_play_view);
+        youTubePlayerFragment.initialize(Util.API_KEY, this);
+        sheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+        sheetBehavior.setDraggable(false);
+
+        sheetBehavior.addBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
+            @Override
+            public void onStateChanged(@NonNull View bottomSheet, int newState) {
+                switch (newState) {
+                    // Nếu bottom sheet đang mở rộng
+                    case BottomSheetBehavior.STATE_EXPANDED:
+                        setDraggable(false);
+                        bnvFragment.setVisibility(View.GONE);
+                        setDisableResize();
+                        ViewGroup.LayoutParams paramss =
+                                (ViewGroup.LayoutParams )youTubePlayerFragment.getView().getLayoutParams();
+                        int width = getResources().getDisplayMetrics().widthPixels;
+                        int height = getResources().getDisplayMetrics().heightPixels;
+                        paramss.height = (int) (height*0.35);
+                        paramss.width = width;
+                        youTubePlayerFragment.getView().setLayoutParams(paramss);
+                        break;
+                        // Khi đang thu nhỏ Bottom Sheet
+                    case BottomSheetBehavior.STATE_COLLAPSED:
+                        bnvFragment.setVisibility(View.VISIBLE);
+                        setVisibleResize();
+                        ViewGroup.LayoutParams params =
+                                (ViewGroup.LayoutParams )youTubePlayerFragment.getView().getLayoutParams();
+                        params.height = 290;
+                        params.width = 550;
+                        youTubePlayerFragment.getView().setLayoutParams(params);
+                        sheetBehavior.setPeekHeight(450);
+                        break;
+                        // Khi bị ẩn đi
+                    case BottomSheetBehavior.STATE_HIDDEN:
+                        youTubePlayerFragment.onDestroy();
+                        setDisableResize();
+                        break;
+                }
+            }
+            @Override
+            public void onSlide(@NonNull View bottomSheet, float slideOffset) {
+
+            }
+        });
     }
 
     private void addFragmentMain(VideoItem itemVideo, SearchItem itemVideoS) {
@@ -372,7 +374,7 @@ public class MainActivity extends AppCompatActivity implements YouTubePlayer.OnI
         transaction.commit();
     }
 
-
+// Chạy video
     @Override
     public void onInitializationSuccess(YouTubePlayer.Provider provider, YouTubePlayer youTubePlayer, boolean b) {
         if (youTubePlayer.isPlaying()) {

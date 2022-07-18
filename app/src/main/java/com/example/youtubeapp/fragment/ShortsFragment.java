@@ -2,34 +2,30 @@ package com.example.youtubeapp.fragment;
 
 import android.os.Bundle;
 
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
 
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.example.youtubeapp.R;
 import com.example.youtubeapp.adapter.ShortsVideoAdapter;
 import com.example.youtubeapp.api.ApiServicePlayList;
 import com.example.youtubeapp.model.detailvideo.DetailVideo;
 import com.example.youtubeapp.model.detailvideo.ItemVideo;
-import com.example.youtubeapp.model.itemrecycleview.VideoChannelItem;
+import com.example.youtubeapp.model.infochannel.Channel;
+import com.example.youtubeapp.model.infochannel.Itemss;
+import com.example.youtubeapp.model.itemrecycleview.SearchItem;
 import com.example.youtubeapp.model.itemrecycleview.VideoItem;
 import com.example.youtubeapp.model.searchyoutube.ItemsSearch;
 import com.example.youtubeapp.model.searchyoutube.Search;
 import com.example.youtubeapp.model.shortsvideo.ExoPlayerItem;
-import com.example.youtubeapp.my_interface.AddLifecycleCallbackListener;
+import com.example.youtubeapp.my_interface.IItemOnClickOpenCommentFromShortsVideo;
 import com.example.youtubeapp.my_interface.OnVideoPreparedListener;
 import com.example.youtubeapp.utiliti.Util;
 import com.google.android.exoplayer2.ExoPlayer;
-import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer;
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView;
 
 import java.util.ArrayList;
@@ -56,13 +52,19 @@ public class ShortsFragment extends Fragment {
         vp2Video = view.findViewById(R.id.vp2_shorts_video);
         listItems = new ArrayList<>();
         listItem = new ArrayList<>();
-        calLApiVideoShortRandom(pageToken, "10", null);
+        calLApiVideoShortRandom(pageToken, "20", null);
         adapter = new ShortsVideoAdapter(getContext(), new OnVideoPreparedListener() {
             @Override
             public void onVideoPrepared(ExoPlayerItem exoPlayerItem) {
                 listItem.add(exoPlayerItem);
             }
+        }, new IItemOnClickOpenCommentFromShortsVideo() {
+            @Override
+            public void onCLickOpenCommentShorts(String idVideo, String cmtCount) {
+                openBottomSheetDiaLogComment(idVideo, cmtCount);
+            }
         });
+
         vp2Video.setAdapter(adapter);
         adapter.setData(listItems);
         vp2Video.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
@@ -194,11 +196,9 @@ public class ShortsFragment extends Fragment {
                 ExoPlayer player = item.getExoPlayer();
                 player.stop();
                 player.clearMediaItems();
-
             }
         }
     }
-
     @Override
     public void onDestroy() {
         super.onDestroy();
@@ -231,11 +231,9 @@ public class ShortsFragment extends Fragment {
                 ExoPlayer player = item.getExoPlayer();
                 player.stop();
                 player.clearMediaItems();
-
             }
         }
     }
-
     private void calLApiVideoShortRandom(String nextPageToken, String maxResults, String order) {
         ApiServicePlayList.apiServicePlayList.videoUpdateNews(
                 nextPageToken,
@@ -253,7 +251,7 @@ public class ShortsFragment extends Fragment {
             public void onResponse(Call<Search> call, Response<Search> response) {
                 String urlThumbnails = "", titleVideo = "", publishAt = "",
                         viewCount = "", idVideo = "", likeCount = "", commentCount = "",
-                        idChannel = "", urlLogoChannel = "", titleChannel = "";
+                        idChannel = "", urlLogoChannel = "", titleChannel = "", subCount = "";
                 Search video = response.body();
                 if (video != null) {
                     List<ItemsSearch> listItem = video.getItems();
@@ -271,10 +269,11 @@ public class ShortsFragment extends Fragment {
                         idChannel = listItem.get(i).getSnippet().getChannelId();
                         titleChannel = listItem.get(i).getSnippet().getChannelTitle();
                         callApiViewCountVideo(idVideo, listItems, i);
+                        callApiChannelFull(idChannel, listItems, i);
 
-                        listItems.add(new VideoItem(urlThumbnails, urlThumbnails, titleVideo,
-                                publishAt, titleChannel, "", idVideo, likeCount,
-                                "", idChannel, "", ""));
+                        listItems.add(new VideoItem(urlThumbnails, "", titleVideo,
+                                publishAt, titleChannel, "", idVideo, "",
+                                "", idChannel, "", "", ""));
                     }
                 }
             }
@@ -304,9 +303,13 @@ public class ShortsFragment extends Fragment {
                     for (int i = 0; i <listItem.size(); i++ ) {
                         viewCount = listItem.get(0).getStatistics().getViewCount();
                         cmtCount = listItem.get(0).getStatistics().getCommentCount();
-                        likeCount = listItem.get(0).getStatistics().likeCount;
+                        likeCount = listItem.get(0).getStatistics().getLikeCount();
                         listItemV.get(pos).setViewCountVideo(viewCount);
-                        listItemV.get(pos).setLikeCountVideo(likeCount);
+                        if (listItem.get(0).getStatistics().getLikeCount() == null) {
+                            listItemV.get(pos).setLikeCountVideo("");
+                        } else {
+                            listItemV.get(pos).setLikeCountVideo(likeCount);
+                        }
                         listItemV.get(pos).setCommentCount(cmtCount);
                     }
                     adapter.notifyDataSetChanged();
@@ -317,6 +320,58 @@ public class ShortsFragment extends Fragment {
 
             }
         });
+    }
+
+    //           Api thông tin channel;
+    public void callApiChannelFull(String idChannel1, List<VideoItem> listItemS, int pos) {
+        ApiServicePlayList.apiServicePlayList.infoChannelFull(
+                "contentDetails",
+                "snippet",
+                "statistics",
+                "topicDetails",
+                "brandingSettings",
+                idChannel1,
+                Util.API_KEY
+        ).enqueue(new Callback<Channel>() {
+            @Override
+            public void onResponse(Call<Channel> call, Response<Channel> response) {
+                String subCount = "",
+                        urlLogoChannel = "";
+                boolean isCheckHideSub = false;
+                Channel channel = response.body();
+                if (channel != null) {
+                    ArrayList<Itemss> listItem = channel.getItems();
+                    Itemss item = listItem.get(0);
+                    isCheckHideSub = item.getStatistics().isHiddenSubscriberCount();
+                    if (isCheckHideSub) {
+                        subCount = "";
+                    } else {
+                        subCount = item.getStatistics().getSubscriberCount();
+                    }
+                    if (item.getSnippet().getThumbnails().getHigh() == null) {
+                        urlLogoChannel = item.getSnippet().getThumbnails().getMedium().getUrl();
+                    } else {
+                        urlLogoChannel = item.getSnippet().getThumbnails().getHigh().getUrl();
+                    }
+                    listItemS.get(pos).setSubCount(subCount);
+                    listItemS.get(pos).setUrlLogoChannel(urlLogoChannel);
+
+                    adapter.notifyItemChanged(pos);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Channel> call, Throwable t) {
+            }
+        });
+    }
+
+    // Open Bottom Sheet Comment From Shorts Video
+    private void openBottomSheetDiaLogComment(String idVideo, String cmtCount) {
+        BottomSheetDialogCommentFragment bottomSheetDialogCommentFragment =
+                BottomSheetDialogCommentFragment.newInstance(idVideo, cmtCount);
+        bottomSheetDialogCommentFragment.show(getChildFragmentManager(),
+                BottomSheetDialogCommentFragment.TAG);
     }
 
 }

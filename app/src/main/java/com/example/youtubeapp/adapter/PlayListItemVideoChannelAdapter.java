@@ -196,7 +196,7 @@ public class PlayListItemVideoChannelAdapter extends RecyclerView.Adapter<Recycl
 
                     itemVideo = new VideoItem(urlThumbnailVideo, urlLogoChannel, titleVideo, publishAt,
                             titleChannel, viewCountVideo, idVideo, likeCountVideo, descVideo,
-                            idChannel, commentCount, duration);
+                            idChannel, commentCount, duration, "");
                 }
                 onClickVideoListener.OnClickItemVideo(itemVideo);
             }

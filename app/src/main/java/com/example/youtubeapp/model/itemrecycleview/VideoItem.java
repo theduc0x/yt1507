@@ -14,6 +14,7 @@ public class VideoItem implements Serializable {
     private String idChannel;
     private String commentCount;
     private String duration;
+    private String subCount;
 
     public String getCommentCount() {
         return commentCount;
@@ -58,7 +59,7 @@ public class VideoItem implements Serializable {
     public VideoItem(String urlImageItemVideo, String urlLogoChannel, String tvTitleVideo,
                      String tvTimeVideo, String tvTitleChannel, String viewCountVideo,
                      String idVideo, String likeCountVideo, String descVideo,
-                     String idChannel, String commentCount, String duration) {
+                     String idChannel, String commentCount, String duration, String subCount) {
         this.urlImageItemVideo = urlImageItemVideo;
         this.urlLogoChannel = urlLogoChannel;
         this.tvTitleVideo = tvTitleVideo;
@@ -71,7 +72,17 @@ public class VideoItem implements Serializable {
         this.idChannel = idChannel;
         this.commentCount = commentCount;
         this.duration = duration;
+        this.subCount = subCount;
     }
+
+    public String getSubCount() {
+        return subCount;
+    }
+
+    public void setSubCount(String subCount) {
+        this.subCount = subCount;
+    }
+
     public VideoItem() {
 
     }

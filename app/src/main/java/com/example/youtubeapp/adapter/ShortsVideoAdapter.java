@@ -1,29 +1,25 @@
 package com.example.youtubeapp.adapter;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Context;
+import android.os.Handler;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.youtubeapp.R;
-import com.example.youtubeapp.activitys.MainActivity;
-import com.example.youtubeapp.fragment.ShortsFragment;
 import com.example.youtubeapp.model.itemrecycleview.VideoItem;
 import com.example.youtubeapp.model.shortsvideo.ExoPlayerItem;
-import com.example.youtubeapp.my_interface.AddLifecycleCallbackListener;
+import com.example.youtubeapp.my_interface.IItemOnClickOpenCommentFromShortsVideo;
 import com.example.youtubeapp.my_interface.OnVideoPreparedListener;
 import com.example.youtubeapp.utiliti.Util;
 import com.google.android.exoplayer2.ExoPlayer;
@@ -35,20 +31,10 @@ import com.google.android.exoplayer2.source.MergingMediaSource;
 import com.google.android.exoplayer2.source.ProgressiveMediaSource;
 import com.google.android.exoplayer2.ui.StyledPlayerView;
 import com.google.android.exoplayer2.upstream.DefaultDataSource;
-import com.google.android.youtube.player.YouTubeInitializationResult;
-import com.google.android.youtube.player.YouTubePlayerFragment;
-import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer;
-import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener;
-import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.YouTubePlayerListener;
-import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.options.IFramePlayerOptions;
-import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.utils.YouTubePlayerUtils;
-import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView;
-import com.pierfrancescosoffritti.androidyoutubeplayer.core.ui.PlayerUiController;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 import at.huber.youtubeExtractor.VideoMeta;
 import at.huber.youtubeExtractor.YouTubeExtractor;
@@ -61,12 +47,14 @@ public class ShortsVideoAdapter extends RecyclerView.Adapter<ShortsVideoAdapter.
     Context context;
     int id ;
     OnVideoPreparedListener onVideoPreparedListener;
+    IItemOnClickOpenCommentFromShortsVideo onClickOpenCommentFromShortsVideo;
 
-    public ShortsVideoAdapter(Context context, OnVideoPreparedListener onVideoPreparedListener) {
+    public ShortsVideoAdapter(Context context, OnVideoPreparedListener onVideoPreparedListener,
+                              IItemOnClickOpenCommentFromShortsVideo onClickOpenCommentFromShortsVideo) {
         this.context = context;
         this.onVideoPreparedListener = onVideoPreparedListener;
+        this.onClickOpenCommentFromShortsVideo = onClickOpenCommentFromShortsVideo;
     }
-
 
 
     public void setData(ArrayList<VideoItem> listItems) {
@@ -107,6 +95,10 @@ public class ShortsVideoAdapter extends RecyclerView.Adapter<ShortsVideoAdapter.
         ProgressBar pbLoading;
         ExoPlayer exoPlayer;
         MediaSource mediaSourceAudio, mediaSourceVideo;
+        LinearLayout llOpenCommentSheet;
+        View vPause;
+        ImageView ivPause;
+
         public ShortsViewHolder(@NonNull View itemView) {
             super(itemView);
             spvVideo = itemView.findViewById(R.id.spv_video);
@@ -116,24 +108,77 @@ public class ShortsVideoAdapter extends RecyclerView.Adapter<ShortsVideoAdapter.
             tvDesc = itemView.findViewById(R.id.tv_desc_shorts);
             civLogoChannel = itemView.findViewById(R.id.civ_logo_channel_shorts);
             pbLoading = itemView.findViewById(R.id.pb_loading_shorts);
+            llOpenCommentSheet = itemView.findViewById(R.id.ll_open_comment_sheet);
+            vPause = itemView.findViewById(R.id.v_pause_play_shorts);
+            ivPause = itemView.findViewById(R.id.iv_pause);
         }
         public void setData(VideoItem item) {
             String urlLogoChannel = item.getUrlLogoChannel();
             String titleChannel = item.getTvTitleChannel();
             String titleVideo = item.getTvTitleVideo();
+            String likeCount = item.getLikeCountVideo();
+            String cmtCount = item.getCommentCount();
             idVideo = item.getIdVideo();
+            String idVideoS = item.getIdVideo();
             String url = "https://www.youtube.com/watch?v=" + idVideo;
-
-
             String idChannel = item.getIdChannel();
 
             tvDesc.setText(titleVideo);
-            tvCmtCount.setText("cmtCount");
+            if (cmtCount.equals("")) {
+                tvCmtCount.setVisibility(View.GONE);
+            } else {
+                tvCmtCount.setVisibility(View.VISIBLE);
+                tvCmtCount.setText(Util.convertViewCount(Double.parseDouble(cmtCount)));
+            }
+
             tvTitleChannel.setText(titleChannel);
-            tvLike.setText("likeCount");
-            Picasso.get().load(urlLogoChannel).into(civLogoChannel);
+            if (!likeCount.equals("")) {
+                tvLike.setVisibility(View.VISIBLE);
+                tvLike.setText(Util.convertViewCount(Double.parseDouble(likeCount)));
+            } else {
+                tvLike.setVisibility(View.GONE);
+            }
+
+            if (!urlLogoChannel.equals("")) {
+                Picasso.get().load(urlLogoChannel).into(civLogoChannel);
+            }
+
+            llOpenCommentSheet.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    onClickOpenCommentFromShortsVideo.onCLickOpenCommentShorts(
+                            idVideoS, cmtCount
+                    );
+                }
+            });
+
+            vPause.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (exoPlayer.isPlaying()) {
+                        ivPause.setVisibility(View.VISIBLE);
+                        new Handler().postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                ivPause.setVisibility(View.GONE);
+                            }
+                        }, 500);
+                        exoPlayer.pause();
+                    } else {
+                        ivPause.setVisibility(View.GONE);
+                        exoPlayer.play();
+                    }
+                }
+            });
+
+
             setVideoPath(url);
         }
+
+        public void setPause() {
+            ivPause.setVisibility(View.GONE);
+        }
+
         public void setVideoPath(String url) {
             exoPlayer = new ExoPlayer.Builder(context).build();
             exoPlayer.addListener(new Player.Listener() {
@@ -178,8 +223,8 @@ public class ShortsVideoAdapter extends RecyclerView.Adapter<ShortsVideoAdapter.
                         iTags.add(137);
 
                         if (ytFiles.get(137) == null) {
-                            if (ytFiles.get(136).getUrl() == null) {
-                                if (ytFiles.get(135).getUrl() == null) {
+                            if (ytFiles.get(136) == null) {
+                                if (ytFiles.get(135) == null) {
                                     videoUrl = ytFiles.get(134).getUrl();
                                 } else
                                 {
@@ -217,7 +262,7 @@ public class ShortsVideoAdapter extends RecyclerView.Adapter<ShortsVideoAdapter.
                         }
                     }
                 }
-            }.extract(youtubeUrl, false, true);
+            }.extract(youtubeUrl);
         }
     }
 

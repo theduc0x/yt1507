@@ -15,14 +15,14 @@
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/abl_replies_video"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/_40sdp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/tb_replies_video"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/_40sdp"
             android:background="@color/white"
             app:menu="@menu/menu_close_replies">
 

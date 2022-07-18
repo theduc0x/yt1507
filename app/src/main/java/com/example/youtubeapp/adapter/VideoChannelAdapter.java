@@ -206,7 +206,7 @@ public class VideoChannelAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
                     itemVideo = new VideoItem(urlThumbnailVideo, urlLogoChannel, titleVideo, publishAt,
                             titleChannel, viewCountVideo, idVideo, likeCountVideo, descVideo,
-                            idChannel, commentCount, duration);
+                            idChannel, commentCount, duration, "");
                 }
                 onClickVideoListener.OnClickItemVideo(itemVideo);
             }

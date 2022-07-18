@@ -16,7 +16,23 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:resize_mode="fill"
-        app:use_controller="true" />
+        app:use_controller="false" />
+
+    <View
+        android:id="@+id/v_pause_play_shorts"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+    <ImageView
+        android:id="@+id/iv_pause"
+        android:layout_width="@dimen/_60sdp"
+        android:layout_height="@dimen/_60sdp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:visibility="gone"
+        android:src="@drawable/baseline_play_arrow_white_24"/>
 
     <ProgressBar
         android:id="@+id/pb_loading_shorts"
@@ -91,6 +107,7 @@
                 android:id="@+id/ib_like_shorts"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:clickable="false"
                 android:background="@drawable/custom_button_transparent"
                 android:src="@drawable/baseline_thumb_up_white_24"/>
             <TextView
@@ -118,6 +135,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/custom_button_transparent"
+                android:clickable="false"
                 android:src="@drawable/baseline_thumb_down_white_24"/>
             <TextView
                 android:id="@+id/tv_dislike_count_share"
@@ -130,6 +148,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/ll_open_comment_sheet"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/_15sdp"
@@ -143,6 +162,7 @@
                 android:id="@+id/ib_comment_shorts"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:clickable="false"
                 android:background="@drawable/custom_button_transparent"
                 android:src="@drawable/baseline_comment_white_24"/>
 
@@ -169,6 +189,7 @@
                 android:id="@+id/ib_share_shorts"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:clickable="false"
                 android:background="@drawable/custom_button_transparent"
                 android:src="@drawable/baseline_share_white_24"/>
             <TextView

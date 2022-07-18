@@ -167,7 +167,7 @@ public class VideoYoutubeAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         isLoadingAdd = true;
         listItemVideo.add(new VideoItem("", "", "",
                 "", "", "", "", "",
-                "", "", "", ""));
+                "", "", "", "", ""));
     }
 
     public void removeFooterLoading() {

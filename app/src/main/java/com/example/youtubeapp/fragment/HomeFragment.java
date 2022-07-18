@@ -4,13 +4,11 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,8 +21,6 @@ import com.example.youtubeapp.activitys.ChannelActivity;
 import com.example.youtubeapp.activitys.MainActivity;
 import com.example.youtubeapp.adapter.CategoryAdapter;
 import com.example.youtubeapp.model.itemrecycleview.CategoryItem;
-import com.example.youtubeapp.model.itemrecycleview.CommentItem;
-import com.example.youtubeapp.model.itemrecycleview.SearchItem;
 import com.example.youtubeapp.model.listcategory.Category;
 import com.example.youtubeapp.my_interface.IItemOnClickCategoryListener;
 import com.example.youtubeapp.my_interface.IItemOnClickChannelListener;
@@ -33,7 +29,6 @@ import com.example.youtubeapp.utiliti.Util;
 import com.example.youtubeapp.model.infochannel.Channel;
 import com.example.youtubeapp.model.infochannel.Itemss;
 import com.example.youtubeapp.model.itemrecycleview.VideoItem;
-import com.example.youtubeapp.activitys.VideoPlayActivity;
 import com.example.youtubeapp.adapter.VideoYoutubeAdapter;
 import com.example.youtubeapp.api.ApiServicePlayList;
 import com.example.youtubeapp.model.listvideohome.Items;
@@ -105,6 +100,7 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
 //                bundle.putString(Util.EXTRA_KEY_ITEM_VIDEO, "Video");
 //                toPlayVideo.putExtras(bundle);
 //                startActivity(toPlayVideo);
+                mainActivity.setResetVideo();
                 mainActivity.setDataVideoPlay(item.getIdVideo(), item, null);
 
             }
@@ -246,7 +242,7 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
                         listAdd.add(new VideoItem(urlThumbnailVideo,
                                 urlLogoChannel, titleVideo, timeVideo,
                                 titleChannel, viewCountVideo, idVideo,
-                                likeCountVideo, descVideo, idChannel, commentCount, duration));
+                                likeCountVideo, descVideo, idChannel, commentCount, duration, ""));
 //                        adapter.notifyItemInserted(i);
                     }
                     // load xong dữ liệu thì sẽ tắt pb

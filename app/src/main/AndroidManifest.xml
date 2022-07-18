@@ -28,7 +28,7 @@
             android:name=".activitys.VideoPlayListActivity"
             android:exported="false"
             android:label="@string/title_activity_video_play_list"
-            android:theme="@style/Theme.YoutubeApp.NoActionBar" />
+            android:theme="@style/Theme.YoutubeApp" />
         <activity
             android:name=".activitys.ChannelActivity"
             android:exported="false" />

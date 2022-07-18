@@ -11,7 +11,7 @@
         android:id="@+id/mn_explore"
         android:icon="@drawable/baseline_explore_black_48"
         app:showAsAction="ifRoom"
-        android:title="@string/titile_menu_explore"/>
+        android:title="@string/tv_shorts"/>
 
     <item
         android:id="@+id/mn_subcription"

@@ -14,7 +14,7 @@
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
     </style>
-    <style name="Theme.YoutubeApp.NoActionBar">
+    <style name="Theme.YoutubeApp.NoActionBar" parent="Theme.YoutubeApp">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>

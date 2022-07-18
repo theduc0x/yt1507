@@ -99,7 +99,7 @@ public class BottomSheetDialogRepliesFragment extends BottomSheetDialogFragment 
         DisplayMetrics displayMetrics = getActivity().getResources().getDisplayMetrics();
         int width = displayMetrics.widthPixels;
         int height = displayMetrics.heightPixels;
-        int maxHeight = (int) (height * 0.65);
+        int maxHeight = (int) (height * 0.8);
 
         BottomSheetBehavior bottomSheetBehavior =
                 BottomSheetBehavior.from(((View) viewDialog.getParent()));
@@ -116,9 +116,9 @@ public class BottomSheetDialogRepliesFragment extends BottomSheetDialogFragment 
                 bottomSheetDialog.dismiss();
             }
         });
-
-        bottomSheetDialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL,
-                WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL);
+//
+//        bottomSheetDialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL,
+//                WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL);
         bottomSheetDialog.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
 
         tbReplies.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
@@ -206,10 +206,10 @@ public class BottomSheetDialogRepliesFragment extends BottomSheetDialogFragment 
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                    callApiReplies(pageTokenR, parentId, "10");
-                    isLoadingR = false;
+                callApiReplies(pageTokenR, parentId, "10");
+                isLoadingR = false;
             }
-        },1000);
+        },500);
     }
 
 

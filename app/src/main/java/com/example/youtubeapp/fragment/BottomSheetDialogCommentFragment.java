@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.util.DisplayMetrics;
 
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -46,6 +47,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class BottomSheetDialogCommentFragment extends BottomSheetDialogFragment {
+    public static final String TAG = BottomSheetDialogCommentFragment.class.getName();
     public static String idVideoM = "", cmtCount = "";
     private TextView tvTotalCmtCount;
     private RecyclerView rvListComment;
@@ -53,9 +55,8 @@ public class BottomSheetDialogCommentFragment extends BottomSheetDialogFragment 
     Toolbar tbCommentVideo;
     ProgressDialog progressDialog;
     VideoPlayActivity videoPlayActivity;
-
-    ArrayList<CommentItem> listCmtItem;
-    ArrayList<CommentItem> listAdd;
+    ArrayList<CommentItem> listCmtItem = new ArrayList<>();
+    ArrayList<CommentItem> listAdd = new ArrayList<>();
     ArrayList<CommentItem> listAddS = new ArrayList<>();
     private int LoadPage = 1;
     private String pageToken = "";
@@ -109,7 +110,7 @@ public class BottomSheetDialogCommentFragment extends BottomSheetDialogFragment 
         DisplayMetrics displayMetrics = getActivity().getResources().getDisplayMetrics();
         int width = displayMetrics.widthPixels;
         int height = displayMetrics.heightPixels;
-        int maxHeight = (int) (height * 0.65);
+        int maxHeight = (int) (height * 0.8);
 
         BottomSheetBehavior bottomSheetBehavior =
                 BottomSheetBehavior.from(((View) viewDialog.getParent()));
@@ -143,9 +144,7 @@ public class BottomSheetDialogCommentFragment extends BottomSheetDialogFragment 
     private void intMain(View view) {
         tvTotalCmtCount = view.findViewById(R.id.tv_comment_count_video_main);
         rvListComment = view.findViewById(R.id.rv_list_comment);
-        listCmtItem = new ArrayList<>();
         tbCommentVideo = view.findViewById(R.id.tb_comment_video);
-        videoPlayActivity = (VideoPlayActivity) getActivity();
         listAddS.add(new CommentItem());
     }
 
@@ -156,6 +155,7 @@ public class BottomSheetDialogCommentFragment extends BottomSheetDialogFragment 
         } else {
             totalPage = (cmtCountD / 10);
         }
+        Log.d("nextCmt", totalPage+"");
 
         tvTotalCmtCount.setText(Util.convertViewCount(Double.parseDouble(cmtCount)));
         if (idVideoM == null) {
@@ -178,7 +178,6 @@ public class BottomSheetDialogCommentFragment extends BottomSheetDialogFragment 
                 new DividerItemDecoration(getActivity(), RecyclerView.VERTICAL);
         rvListComment.setLayoutManager(linearLayoutManager);
         rvListComment.addItemDecoration(decoration);
-        rvListComment.setNestedScrollingEnabled(false);
         rvListComment.setAdapter(adapter);
 
         setFirstDataPo();
@@ -206,7 +205,6 @@ public class BottomSheetDialogCommentFragment extends BottomSheetDialogFragment 
         callApiComment(idVideoM, pageToken, "relevance", "10");
     }
 
-
     // Set propress bar load data
     private void setProgressBar() {
         if (currenPage < totalPage) {
@@ -228,11 +226,10 @@ public class BottomSheetDialogCommentFragment extends BottomSheetDialogFragment 
                     isLoading = false;
                 }
             }
-        },1000);
+        },500);
     }
 
     private void callApiComment(String id, String nextPageToken, String order, String maxResults) {
-        listAdd = new ArrayList<>();
         ApiServicePlayList.apiServicePlayList.comment(
                 nextPageToken,
                 "snippet",
@@ -254,8 +251,8 @@ public class BottomSheetDialogCommentFragment extends BottomSheetDialogFragment 
 
                 Comment comment = response.body();
                 if (comment != null) {
-
                     pageToken = comment.getNextPageToken();
+                    Log.d("pageToken", pageToken);
                     ArrayList<ItemsComment> listItem = comment.getItems();
                     for (int i = 0; i < listItem.size(); i++) {
                         idComment = listItem.get(i).getId();
@@ -307,6 +304,7 @@ public class BottomSheetDialogCommentFragment extends BottomSheetDialogFragment 
                         listCmtItem.addAll(listAdd);
                         adapter.notifyDataSetChanged();
                     }
+                    listAdd = new ArrayList<>();
                     setProgressBar();
 
                 }

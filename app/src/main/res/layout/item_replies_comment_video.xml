@@ -32,8 +32,10 @@
             android:layout_marginTop="@dimen/_6sdp"
             android:layout_toRightOf="@id/civ_logo_author_replies_item"
             android:maxWidth="@dimen/_120sdp"
-            android:textSize="@dimen/_11sdp"
-            android:text="Liên Xô • " />
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:text="Liên Xô • "
+            android:textSize="@dimen/_11sdp" />
 
         <TextView
             android:id="@+id/tv_date_diff_replies_item"

@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.youtubeapp.R;
+import com.example.youtubeapp.activitys.MainActivity;
 import com.example.youtubeapp.model.itemrecycleview.SearchItem;
 import com.example.youtubeapp.utiliti.Util;
 import com.example.youtubeapp.activitys.VideoPlayActivity;
@@ -41,6 +42,7 @@ public class RelatedToVideoFragment extends Fragment {
     String idVideoRe = "";
     String pageTokenTo = "";
     Search search;
+    MainActivity mainActivity;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -71,12 +73,14 @@ public class RelatedToVideoFragment extends Fragment {
             adapter = new RelatedVideoAdapter(rvRelatedVideo, listItems, new IItemOnClickVideoListener() {
                 @Override
                 public void OnClickItemVideo(VideoItem item) {
-                    Intent toPlayVideo = new Intent(getActivity(), VideoPlayActivity.class);
-                    Bundle bundle = new Bundle();
-                    bundle.putSerializable(Util.BUNDLE_EXTRA_OBJECT_ITEM_VIDEO, item);
-                    bundle.putString(Util.EXTRA_KEY_ITEM_VIDEO, "Video");
-                    toPlayVideo.putExtras(bundle);
-                    startActivity(toPlayVideo);
+//                    Intent toPlayVideo = new Intent(getActivity(), VideoPlayActivity.class);
+//                    Bundle bundle = new Bundle();
+//                    bundle.putSerializable(Util.BUNDLE_EXTRA_OBJECT_ITEM_VIDEO, item);
+//                    bundle.putString(Util.EXTRA_KEY_ITEM_VIDEO, "Video");
+//                    toPlayVideo.putExtras(bundle);
+//                    startActivity(toPlayVideo);
+                    mainActivity.setResetVideo();
+                    mainActivity.setDataVideoPlay(item.getIdVideo(), item, null);
                 }
             });
             rvRelatedVideo.addItemDecoration(decoration);
@@ -87,6 +91,7 @@ public class RelatedToVideoFragment extends Fragment {
 
     private void initView(View view) {
         rvRelatedVideo = view.findViewById(R.id.rv_list_related_video);
+        mainActivity = (MainActivity) getActivity();
     }
 
 
@@ -142,7 +147,7 @@ public class RelatedToVideoFragment extends Fragment {
                             listItems.add(new VideoItem(urlThumbnailVideo,
                                     urlLogoChannel, titleVideo, timeVideo,
                                     titleChannel, viewCountVideo, idVideo,
-                                    likeCountVideo, descVideo, idChannel, commentCount, duration));
+                                    likeCountVideo, descVideo, idChannel, commentCount, duration, ""));
                             n++;
 //                        adapter.notifyItemInserted(i);
                         }
