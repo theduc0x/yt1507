@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager2.widget.ViewPager2;
 
@@ -19,6 +20,7 @@ import com.example.youtubeapp.R;
 import com.example.youtubeapp.activitys.MainActivity;
 import com.example.youtubeapp.adapter.ViewPagerChannelAdapter;
 import com.example.youtubeapp.utiliti.Util;
+import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 import com.google.android.material.tabs.TabLayout;
@@ -33,7 +35,8 @@ public class ChannelFragment extends Fragment {
     MainActivity mainActivity;
     ImageButton ibBack;
     BottomNavigationView bnvChannel;
-
+    Toolbar tbChannel;
+    AppBarLayout ablChannel;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -47,6 +50,8 @@ public class ChannelFragment extends Fragment {
                 mainActivity.onBackPressed();
             }
         });
+        tbChannel.setVisibility(View.VISIBLE);
+        ablChannel.setVisibility(View.VISIBLE);
 //        setBnvChannel();
         return view;
     }
@@ -56,6 +61,8 @@ public class ChannelFragment extends Fragment {
         tvTitleChannel =  view.findViewById(R.id.tv_title_channel_nav);
         ibBack =  view.findViewById(R.id.ib_back_home_channel);
         bnvChannel =  view.findViewById(R.id.bnv_fragment_channel);
+        tbChannel = view.findViewById(R.id.tb_nav_channel);
+        ablChannel = view.findViewById(R.id.abl_nav_channel);
         mainActivity = (MainActivity) getActivity();
     }
 
@@ -88,10 +95,12 @@ public class ChannelFragment extends Fragment {
             }
         }).attach();
     }
-    private void getIdChannelAndTransHomeChannel(String idChannel, String titleChannel) {
-//        Intent getData = getIntent();
-//        idChannel = getData.getStringExtra(Util.EXTRA_ID_CHANNEL_TO_CHANNEL);
-//        titleChannel = getData.getStringExtra(Util.EXTRA_TITLE_CHANNEL_TO_CHANNEL);
+    private void getIdChannelAndTransHomeChannel() {
+        Bundle bundle = getArguments();
+        if (bundle != null) {
+            idChannel = bundle.getString(Util.EXTRA_ID_CHANNEL_TO_CHANNEL);
+            titleChannel = bundle.getString(Util.EXTRA_TITLE_CHANNEL_TO_CHANNEL);
+        }
         tvTitleChannel.setText(titleChannel);
         adapter.setData(idChannel);
     }

@@ -11,7 +11,7 @@
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/abl_nav_channel"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/_40sdp"
         android:background="@drawable/custom_button_transparent">
 
         <androidx.appcompat.widget.Toolbar
@@ -70,15 +70,15 @@
 
     </LinearLayout>
 
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/bnv_fragment_channel"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        app:itemBackground="@color/white"
-        app:itemIconTint="@color/custom_color_bottom_nav"
-        app:itemTextColor="@color/custom_color_bottom_nav"
-        app:labelVisibilityMode="labeled"
-        app:menu="@menu/menu_bottom_channel"/>
+<!--    <com.google.android.material.bottomnavigation.BottomNavigationView-->
+<!--        android:id="@+id/bnv_fragment_channel"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_gravity="bottom"-->
+<!--        app:itemBackground="@color/white"-->
+<!--        app:itemIconTint="@color/custom_color_bottom_nav"-->
+<!--        app:itemTextColor="@color/custom_color_bottom_nav"-->
+<!--        app:labelVisibilityMode="labeled"-->
+<!--        app:menu="@menu/menu_bottom_channel"/>-->
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

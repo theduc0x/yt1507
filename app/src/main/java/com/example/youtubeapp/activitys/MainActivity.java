@@ -30,6 +30,7 @@ import android.widget.Toast;
 import com.example.youtubeapp.R;
 import com.example.youtubeapp.adapter.CategoryAdapter;
 import com.example.youtubeapp.api.ApiServicePlayList;
+import com.example.youtubeapp.fragment.ChannelFragment;
 import com.example.youtubeapp.fragment.ShortsFragment;
 import com.example.youtubeapp.fragment.HomeFragment;
 import com.example.youtubeapp.fragment.LibraryFragment;
@@ -204,6 +205,20 @@ public class MainActivity extends AppCompatActivity implements YouTubePlayer.OnI
         searchFragment.setArguments(bundle);
         fragmentTransaction.replace(R.id.fl_content, searchFragment, "fragSearch");
         fragmentTransaction.addToBackStack("SearchFragment");
+        fragmentTransaction.commit();
+    }
+
+    // open fragment channel
+    public void addFragmentChannel(String idChannel, String titleChannel) {
+        setToolBarMainInvisible();
+        ChannelFragment channelFragment = new ChannelFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString(Util.EXTRA_ID_CHANNEL_TO_CHANNEL, idChannel);
+        bundle.putString(Util.EXTRA_TITLE_CHANNEL_TO_CHANNEL, titleChannel);
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        channelFragment.setArguments(bundle);
+        fragmentTransaction.replace(R.id.fl_content, channelFragment, "channelFragment");
+        fragmentTransaction.addToBackStack("ChannelFragment");
         fragmentTransaction.commit();
     }
 

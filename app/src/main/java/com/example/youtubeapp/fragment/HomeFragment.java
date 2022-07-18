@@ -107,11 +107,11 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         }, new IItemOnClickChannelListener() {
             @Override
             public void onClickOpenChannel(String idChannel, String titleChannel) {
-                Intent openToChannel = new Intent(getActivity(), ChannelActivity.class);
-                openToChannel.putExtra(Util.EXTRA_ID_CHANNEL_TO_CHANNEL, idChannel);
-                openToChannel.putExtra(Util.EXTRA_TITLE_CHANNEL_TO_CHANNEL, titleChannel);
-                startActivity(openToChannel);
-//                    mainActivity.addFragmentChannel(idChannel, titleChannel);
+//                Intent openToChannel = new Intent(getActivity(), ChannelActivity.class);
+//                openToChannel.putExtra(Util.EXTRA_ID_CHANNEL_TO_CHANNEL, idChannel);
+//                openToChannel.putExtra(Util.EXTRA_TITLE_CHANNEL_TO_CHANNEL, titleChannel);
+//                startActivity(openToChannel);
+                    mainActivity.addFragmentChannel(idChannel, titleChannel);
             }
         });
 
