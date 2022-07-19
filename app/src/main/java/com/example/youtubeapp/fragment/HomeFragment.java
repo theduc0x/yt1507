@@ -1,6 +1,5 @@
 package com.example.youtubeapp.fragment;
 
-import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -9,6 +8,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,7 +17,6 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.example.youtubeapp.R;
-import com.example.youtubeapp.activitys.ChannelActivity;
 import com.example.youtubeapp.activitys.MainActivity;
 import com.example.youtubeapp.adapter.CategoryAdapter;
 import com.example.youtubeapp.model.itemrecycleview.CategoryItem;
@@ -71,7 +70,7 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         srlReloadData.setOnRefreshListener(this);
         mainActivity = (MainActivity) getActivity();
         llCategory = view.findViewById(R.id.ll_category);
-
+        mainActivity.setToolBarMainVisible();
 
         callCategory("vn");
         listCategory = new ArrayList<>();
@@ -160,9 +159,14 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     }
     // Load dữ liệu của page tiếp theo
     private void loadNextPage() {
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
                 Toast.makeText(getContext(), "Load Page" + currenPage, Toast.LENGTH_SHORT).show();
                 callApiPlaylist(pageToken, "10", categoryId);
                 isLoading = false;
+            }
+        },500);
     }
 
     // Get dữ liệu về

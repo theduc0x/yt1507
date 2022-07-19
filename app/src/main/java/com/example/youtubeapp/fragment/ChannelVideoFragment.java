@@ -1,10 +1,8 @@
 package com.example.youtubeapp.fragment;
 
 import android.annotation.SuppressLint;
-import android.content.Intent;
 import android.os.Bundle;
 
-import androidx.appcompat.widget.AppCompatButton;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -19,9 +17,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.youtubeapp.R;
+import com.example.youtubeapp.activitys.MainActivity;
 import com.example.youtubeapp.my_interface.IItemOnClickSortListener;
 import com.example.youtubeapp.utiliti.Util;
-import com.example.youtubeapp.activitys.VideoPlayActivity;
 import com.example.youtubeapp.adapter.VideoChannelAdapter;
 import com.example.youtubeapp.api.ApiServicePlayList;
 import com.example.youtubeapp.model.detailvideo.DetailVideo;
@@ -47,6 +45,7 @@ public class ChannelVideoFragment extends Fragment implements IItemOnClickSortLi
     ArrayList<VideoChannelItem> list;
     VideoChannelAdapter adapter;
     String idChannel;
+    MainActivity mainActivity;
     private String pageToken = "";
     private boolean isLoading;
     private boolean isLastPage;
@@ -62,6 +61,7 @@ public class ChannelVideoFragment extends Fragment implements IItemOnClickSortLi
         rvListVideo = view.findViewById(R.id.rv_list_video_channel);
         tvClickName = view.findViewById(R.id.tv_sort_video_channel);
         llOpenSort = view.findViewById(R.id.ll_sort_video_channel);
+        mainActivity = (MainActivity) getActivity();
         listItems = new ArrayList<>();
         // lấy idChannel
         getBundle();
@@ -72,12 +72,14 @@ public class ChannelVideoFragment extends Fragment implements IItemOnClickSortLi
         adapter = new VideoChannelAdapter(new IItemOnClickVideoListener() {
             @Override
             public void OnClickItemVideo(VideoItem item) {
-                Intent toPlayVideo = new Intent(getActivity(), VideoPlayActivity.class);
-                Bundle bundle = new Bundle();
-                bundle.putSerializable(Util.BUNDLE_EXTRA_OBJECT_ITEM_VIDEO, item);
-                bundle.putString(Util.EXTRA_KEY_ITEM_VIDEO, "Video");
-                toPlayVideo.putExtras(bundle);
-                startActivity(toPlayVideo);
+//                Intent toPlayVideo = new Intent(getActivity(), VideoPlayActivity.class);
+//                Bundle bundle = new Bundle();
+//                bundle.putSerializable(Util.BUNDLE_EXTRA_OBJECT_ITEM_VIDEO, item);
+//                bundle.putString(Util.EXTRA_KEY_ITEM_VIDEO, "Video");
+//                toPlayVideo.putExtras(bundle);
+//                startActivity(toPlayVideo);
+                mainActivity.setResetVideo();
+                mainActivity.setDataVideoPlay(item.getIdVideo(), item, null);
             }
         });
 //        rvListVideo.setNestedScrollingEnabled(false);

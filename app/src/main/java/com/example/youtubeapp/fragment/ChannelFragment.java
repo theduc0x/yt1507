@@ -27,6 +27,7 @@ import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 
 public class ChannelFragment extends Fragment {
+    public static final String TAG = ChannelFragment.class.getName();
     TabLayout tlChannel;
     ViewPager2 vp2Content;
     ViewPagerChannelAdapter adapter;
@@ -34,7 +35,6 @@ public class ChannelFragment extends Fragment {
     TextView tvTitleChannel;
     MainActivity mainActivity;
     ImageButton ibBack;
-    BottomNavigationView bnvChannel;
     Toolbar tbChannel;
     AppBarLayout ablChannel;
     @Override
@@ -47,12 +47,27 @@ public class ChannelFragment extends Fragment {
         ibBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mainActivity.onBackPressed();
+                if (getParentFragmentManager() != null) {
+                    getParentFragmentManager().popBackStack();
+                }
             }
         });
         tbChannel.setVisibility(View.VISIBLE);
         ablChannel.setVisibility(View.VISIBLE);
-//        setBnvChannel();
+        tbChannel.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.mn_search_channel:
+                        mainActivity.addFragmentSearch("");
+                }
+                return false;
+            }
+        });
+
+        if (tbChannel.getParent() instanceof AppBarLayout) {
+            ((AppBarLayout) tbChannel.getParent()).setExpanded(true, true);
+        }
         return view;
     }
     private void initView(View view) {
@@ -60,7 +75,6 @@ public class ChannelFragment extends Fragment {
         vp2Content =  view.findViewById(R.id.vp2_content);
         tvTitleChannel =  view.findViewById(R.id.tv_title_channel_nav);
         ibBack =  view.findViewById(R.id.ib_back_home_channel);
-        bnvChannel =  view.findViewById(R.id.bnv_fragment_channel);
         tbChannel = view.findViewById(R.id.tb_nav_channel);
         ablChannel = view.findViewById(R.id.abl_nav_channel);
         mainActivity = (MainActivity) getActivity();
@@ -104,32 +118,4 @@ public class ChannelFragment extends Fragment {
         tvTitleChannel.setText(titleChannel);
         adapter.setData(idChannel);
     }
-
-//    private void setBnvChannel() {
-//        bnvChannel.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
-//            @SuppressLint("NonConstantResourceId")
-//            @Override
-//            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-//                switch (item.getItemId()) {
-//                    case R.id.mn_home_channel:
-//                        getSupportFragmentManager().popBackStack(HomeFragment.TAG, 0);
-//                        break;
-//                    case R.id.mn_explore_channel:
-//
-//                        break;
-//                    case R.id.mn_subcription_channel:
-//
-//                        break;
-//                    case R.id.mn_notification_channel:
-//
-//                        break;
-//                    case R.id.mn_library_channel:
-//
-//                        break;
-//                }
-//                return false;
-//
-//            }
-//        });
-//    }
 }

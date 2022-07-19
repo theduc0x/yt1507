@@ -7,7 +7,7 @@
     tools:context=".fragment.SearchFragment">
 
     <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/abl_nav"
+        android:id="@+id/abl_nav_search"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="parent"
@@ -54,7 +54,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/abl_nav"
+        app:layout_constraintTop_toBottomOf="@id/abl_nav_search"
         android:layout_marginTop="@dimen/_6sdp"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

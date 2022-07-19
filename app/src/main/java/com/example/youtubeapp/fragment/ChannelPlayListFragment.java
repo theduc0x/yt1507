@@ -1,6 +1,5 @@
 package com.example.youtubeapp.fragment;
 
-import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.appcompat.widget.AppCompatButton;
@@ -20,8 +19,8 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.example.youtubeapp.R;
+import com.example.youtubeapp.activitys.MainActivity;
 import com.example.youtubeapp.utiliti.Util;
-import com.example.youtubeapp.activitys.VideoPlayListActivity;
 import com.example.youtubeapp.adapter.PlayListAdapter;
 import com.example.youtubeapp.api.ApiServicePlayList;
 import com.example.youtubeapp.model.itemrecycleview.PlayListItem;
@@ -44,6 +43,7 @@ public class ChannelPlayListFragment extends Fragment {
     ArrayList<PlayListItem> listItems;
     ArrayList<PlayListItem> listAdd;
     String idChannel;
+    MainActivity mainActivity;
     private String pageToken = "";
     private boolean isLoading;
     private boolean isLastPage;
@@ -58,6 +58,7 @@ public class ChannelPlayListFragment extends Fragment {
         rvPlayList = view.findViewById(R.id.rv_list_playlist_channel);
         llOpenSort = view.findViewById(R.id.ll_sort_playlist_channel);
         btOpenSort = view.findViewById(R.id.bt_sort_playlist_channel);
+        mainActivity = (MainActivity) getActivity();
         listItems = new ArrayList<>();
         getBundle();
 
@@ -67,15 +68,16 @@ public class ChannelPlayListFragment extends Fragment {
         adapter = new PlayListAdapter(new IItemOnClickPlayListListener() {
             @Override
             public void onCLickItemPlayList(PlayListItem item) {
-                Intent openToChannel = new Intent(getActivity(), VideoPlayListActivity.class);
-                Bundle bundle = new Bundle();
-                bundle.putSerializable(Util.BUNDLE_EXTRA_PLAY_LIST_TO_VIDEO_PLAY_LIST, item);
-                bundle.putString(Util.EXTRA_KEY_ITEM_PLAYLIST, "Channel");
-                openToChannel.putExtras(bundle);
-                startActivity(openToChannel);
+//                Intent openToChannel = new Intent(getActivity(), VideoPlayListActivity.class);
+//                Bundle bundle = new Bundle();
+//                bundle.putSerializable(Util.BUNDLE_EXTRA_PLAY_LIST_TO_VIDEO_PLAY_LIST, item);
+//                bundle.putString(Util.EXTRA_KEY_ITEM_PLAYLIST, "Channel");
+//                openToChannel.putExtras(bundle);
+//                startActivity(openToChannel);
+                mainActivity.addFragmenPlayListVideo(item, null);
             }
         });
-                rvPlayList.setAdapter(adapter);
+        rvPlayList.setAdapter(adapter);
         setFirstData();
 
         rvPlayList.addOnScrollListener(new PaginationScrollListener(linearLayoutManager) {

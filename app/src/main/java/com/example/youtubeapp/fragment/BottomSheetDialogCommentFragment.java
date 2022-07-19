@@ -14,7 +14,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -28,7 +27,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.youtubeapp.R;
 import com.example.youtubeapp.my_interface.PaginationScrollListener;
 import com.example.youtubeapp.utiliti.Util;
-import com.example.youtubeapp.activitys.VideoPlayActivity;
 import com.example.youtubeapp.adapter.CommentYoutubeAdapter;
 import com.example.youtubeapp.api.ApiServicePlayList;
 import com.example.youtubeapp.model.itemrecycleview.CommentItem;
@@ -54,7 +52,6 @@ public class BottomSheetDialogCommentFragment extends BottomSheetDialogFragment 
     CommentYoutubeAdapter adapter;
     Toolbar tbCommentVideo;
     ProgressDialog progressDialog;
-    VideoPlayActivity videoPlayActivity;
     ArrayList<CommentItem> listCmtItem = new ArrayList<>();
     ArrayList<CommentItem> listAdd = new ArrayList<>();
     ArrayList<CommentItem> listAddS = new ArrayList<>();
@@ -230,6 +227,7 @@ public class BottomSheetDialogCommentFragment extends BottomSheetDialogFragment 
     }
 
     private void callApiComment(String id, String nextPageToken, String order, String maxResults) {
+        listAdd = new ArrayList<>();
         ApiServicePlayList.apiServicePlayList.comment(
                 nextPageToken,
                 "snippet",
@@ -304,7 +302,7 @@ public class BottomSheetDialogCommentFragment extends BottomSheetDialogFragment 
                         listCmtItem.addAll(listAdd);
                         adapter.notifyDataSetChanged();
                     }
-                    listAdd = new ArrayList<>();
+
                     setProgressBar();
 
                 }

@@ -15,6 +15,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="@dimen/_40sdp"
         app:resize_mode="fill"
         app:use_controller="false" />
 

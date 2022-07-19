@@ -69,9 +69,8 @@ public class SearchFragment extends Fragment {
         getBundle();
         etSearch.setText(how);
         etSearch.requestFocus();
-//        InputMethodManager imgr = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-//        imgr.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
         mainActivity = (MainActivity) getActivity();
+
         listHint = new ArrayList<>();
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(),
                 RecyclerView.VERTICAL, false);
@@ -85,15 +84,12 @@ public class SearchFragment extends Fragment {
                 new IItemOnClickSearchListener() {
             @Override
             public void onClickSearchListener(String q) {
-//                removeSearchFragment();
                 mainActivity.addFragmentSearchResults(q);
                 etSearch.setText(q);
             }
         });
         rvListHint.setAdapter(adapter);
-
         adapter.setData(listHint);
-
         etSearch.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -164,15 +160,6 @@ public class SearchFragment extends Fragment {
             }
         });
     }
-
-//    public void removeSearchFragment() {
-//        FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
-//            transaction.remove(this);
-//            transaction.commit();
-//        getChildFragmentManager().popBackStack();
-//    }
-
-
 
     private void callApiHintSearch(String hint) {
         listHint.clear();

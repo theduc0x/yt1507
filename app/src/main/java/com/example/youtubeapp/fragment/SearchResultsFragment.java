@@ -1,6 +1,5 @@
 package com.example.youtubeapp.fragment;
 
-import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -23,10 +22,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.youtubeapp.R;
-import com.example.youtubeapp.activitys.ChannelActivity;
 import com.example.youtubeapp.activitys.MainActivity;
-import com.example.youtubeapp.activitys.VideoPlayActivity;
-import com.example.youtubeapp.activitys.VideoPlayListActivity;
 import com.example.youtubeapp.adapter.SearchResultsAdapter;
 import com.example.youtubeapp.api.ApiServicePlayList;
 import com.example.youtubeapp.model.detailvideo.DetailVideo;
@@ -45,7 +41,6 @@ import com.example.youtubeapp.my_interface.IItemOnClickVideoSearchListener;
 import com.example.youtubeapp.my_interface.PaginationScrollListener;
 import com.example.youtubeapp.utiliti.Util;
 
-import java.time.Duration;
 import java.util.ArrayList;
 
 import retrofit2.Call;
@@ -53,6 +48,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class SearchResultsFragment extends Fragment implements IItemClickFilterSearch {
+    public static final String TAG = SearchResultsFragment.class.getName();
     String q;
     String pageToken = "";
     ArrayList<SearchItem> listItems;
@@ -87,32 +83,36 @@ public class SearchResultsFragment extends Fragment implements IItemClickFilterS
             @Override
             // Mở channel và truyền dữ liệu sang
             public void onClickOpenChannel(String idChannel, String titleChannel) {
-                Intent openToChannel = new Intent(getActivity(), ChannelActivity.class);
-                openToChannel.putExtra(Util.EXTRA_ID_CHANNEL_TO_CHANNEL, idChannel);
-                openToChannel.putExtra(Util.EXTRA_TITLE_CHANNEL_TO_CHANNEL, titleChannel);
-                startActivity(openToChannel);
+//                Intent openToChannel = new Intent(getActivity(), ChannelActivity.class);
+//                openToChannel.putExtra(Util.EXTRA_ID_CHANNEL_TO_CHANNEL, idChannel);
+//                openToChannel.putExtra(Util.EXTRA_TITLE_CHANNEL_TO_CHANNEL, titleChannel);
+//                startActivity(openToChannel);
+                mainActivity.addFragmentChannel(idChannel, titleChannel);
             }
             // Mở play list
         }, new IItemOnClickPlayListSearchListener() {
             @Override
             public void onCLickItemPlayListS(SearchItem item) {
-                Intent openToChannel = new Intent(getActivity(), VideoPlayListActivity.class);
-                Bundle bundle = new Bundle();
-                bundle.putSerializable(Util.BUNDLE_EXTRA_PLAY_LIST_TO_VIDEO_PLAY_LIST, item);
-                bundle.putString(Util.EXTRA_KEY_ITEM_PLAYLIST, "Search");
-                openToChannel.putExtras(bundle);
-                startActivity(openToChannel);
+//                Intent openToChannel = new Intent(getActivity(), VideoPlayListActivity.class);
+//                Bundle bundle = new Bundle();
+//                bundle.putSerializable(Util.BUNDLE_EXTRA_PLAY_LIST_TO_VIDEO_PLAY_LIST, item);
+//                bundle.putString(Util.EXTRA_KEY_ITEM_PLAYLIST, "Search");
+//                openToChannel.putExtras(bundle);
+//                startActivity(openToChannel);
+                mainActivity.addFragmenPlayListVideo(null, item);
             }
             // Xem video
         }, new IItemOnClickVideoSearchListener() {
             @Override
             public void OnClickItemVideoS(SearchItem item) {
-                Intent toPlayVideo = new Intent(getActivity(), VideoPlayActivity.class);
-                Bundle bundle = new Bundle();
-                bundle.putSerializable(Util.BUNDLE_EXTRA_OBJECT_ITEM_VIDEO, item);
-                bundle.putString(Util.EXTRA_KEY_ITEM_VIDEO, "Search");
-                toPlayVideo.putExtras(bundle);
-                startActivity(toPlayVideo);
+//                Intent toPlayVideo = new Intent(getActivity(), VideoPlayActivity.class);
+//                Bundle bundle = new Bundle();
+//                bundle.putSerializable(Util.BUNDLE_EXTRA_OBJECT_ITEM_VIDEO, item);
+//                bundle.putString(Util.EXTRA_KEY_ITEM_VIDEO, "Search");
+//                toPlayVideo.putExtras(bundle);
+//                startActivity(toPlayVideo);
+                mainActivity.setResetVideo();
+                mainActivity.setDataVideoPlay(item.getIdVideo(), null, item);
             }
         });
         rvListSearch.setAdapter(adapter);
@@ -155,6 +155,9 @@ public class SearchResultsFragment extends Fragment implements IItemClickFilterS
         ibBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // Dòng tiên để bỏ quay trở lại phần search
+                getParentFragmentManager().popBackStack();
+                // Quay về main home
                 mainActivity.onBackPressed();
             }
         });

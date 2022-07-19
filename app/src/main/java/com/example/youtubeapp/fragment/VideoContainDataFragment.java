@@ -2,7 +2,6 @@ package com.example.youtubeapp.fragment;
 
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
-import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 
@@ -24,10 +23,8 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -35,7 +32,6 @@ import android.widget.TextView;
 
 import com.example.youtubeapp.R;
 import com.example.youtubeapp.activitys.MainActivity;
-import com.example.youtubeapp.activitys.VideoPlayActivity;
 import com.example.youtubeapp.adapter.CommentYoutubeAdapter;
 import com.example.youtubeapp.adapter.RepliesCommentAdapter;
 import com.example.youtubeapp.model.itemrecycleview.CommentItem;
@@ -47,7 +43,6 @@ import com.example.youtubeapp.model.listreplies.Replies;
 import com.example.youtubeapp.my_interface.IItemOnClickCommentListener;
 import com.example.youtubeapp.my_interface.PaginationScrollListener;
 import com.example.youtubeapp.utiliti.Util;
-import com.example.youtubeapp.activitys.ChannelActivity;
 import com.example.youtubeapp.api.ApiServicePlayList;
 import com.example.youtubeapp.model.infochannel.Channel;
 import com.example.youtubeapp.model.infochannel.Itemss;
@@ -100,11 +95,10 @@ public class VideoContainDataFragment extends Fragment {
     CommentYoutubeAdapter adapterCmt;
     Toolbar tbCommentVideo;
     ProgressDialog progressDialog;
-    VideoPlayActivity videoPlayActivity;
     ArrayList<CommentItem> listCmtItem;
     ArrayList<CommentItem> listAdd;
     ArrayList<CommentItem> listAddS = new ArrayList<>();
-    private int LoadPage = 1;
+    private int loadPage = 1;
     private String pageToken = "";
     private boolean isLoading;
     private boolean isLastPage;
@@ -175,34 +169,11 @@ public class VideoContainDataFragment extends Fragment {
             public boolean onMenuItemClick(MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.mn_close_replies:
+                        sheetBehaviorRep.setState(BottomSheetBehavior.STATE_COLLAPSED);
                         sheetBehaviorCmt.setState(BottomSheetBehavior.STATE_COLLAPSED);
                         break;
                 }
                 return false;
-            }
-        });
-
-        nsvVideo.setOnTouchListener(new View.OnTouchListener() {
-
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                mainActivity.setDraggable(false);
-                int action = event.getAction();
-                switch (action) {
-                    case MotionEvent.ACTION_DOWN:
-                        // Disallow NestedScrollView to intercept touch events.
-                        v.getParent().requestDisallowInterceptTouchEvent(true);
-                        break;
-
-                    case MotionEvent.ACTION_UP:
-                        // Allow NestedScrollView to intercept touch events.
-                        v.getParent().requestDisallowInterceptTouchEvent(false);
-
-                        break;
-                }
-                // Handle RecyclerView touch events.
-                v.onTouchEvent(event);
-                return true;
             }
         });
 
@@ -240,7 +211,6 @@ public class VideoContainDataFragment extends Fragment {
                     }
                 }
             }
-
             @Override
             public void onFailure(Call<Channel> call, Throwable t) {
 //                Toast.makeText(VideoPlayActivity.this,
@@ -456,9 +426,9 @@ public class VideoContainDataFragment extends Fragment {
                 @Override
                 public void onClick(View v) {
                     if(sheetBehaviorCmt.getState() != BottomSheetBehavior.STATE_EXPANDED){
-//                        resetData();
+                        resetData();
                         setDataComment();
-                        LoadPage = 1;
+                        loadPage = 1;
                         sheetBehaviorCmt.setState(BottomSheetBehavior.STATE_EXPANDED);
                     } else {
                         sheetBehaviorCmt.setState(BottomSheetBehavior.STATE_COLLAPSED);
@@ -481,11 +451,8 @@ public class VideoContainDataFragment extends Fragment {
         transaction.commit();
     }
     private void openChannel() {
-
-        Intent openToChannel = new Intent(getActivity(), ChannelActivity.class);
-        openToChannel.putExtra(Util.EXTRA_ID_CHANNEL_TO_CHANNEL, idChannel);
-        openToChannel.putExtra(Util.EXTRA_TITLE_CHANNEL_TO_CHANNEL, titleChannel);
-        startActivity(openToChannel);
+        mainActivity.resizeVideoPlay();
+        mainActivity.addFragmentChannel(idChannel, titleChannel);
     }
 //  Bottom Sheet Comment
     private void setDataComment() {
@@ -523,7 +490,6 @@ public class VideoContainDataFragment extends Fragment {
                 new DividerItemDecoration(getActivity(), RecyclerView.VERTICAL);
         rvListComment.setLayoutManager(linearLayoutManager);
         rvListComment.addItemDecoration(decoration);
-        rvListComment.setNestedScrollingEnabled(false);
         rvListComment.setAdapter(adapterCmt);
 
         setFirstDataR();
@@ -565,10 +531,10 @@ public class VideoContainDataFragment extends Fragment {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                if (LoadPage == 1) {
+                if (loadPage == 1) {
                     callApiComment(idVideo, pageToken, "relevance", "10");
                     isLoading = false;
-                } else if (LoadPage == 2) {
+                } else if (loadPage == 2) {
                     callApiComment(idVideo, pageToken, "time", "10");
                     isLoading = false;
                 }
@@ -645,7 +611,6 @@ public class VideoContainDataFragment extends Fragment {
                     }
                     if (listCmtItem == null) {
                         listCmtItem = listAddS;
-//                        listCmtItem = listAdd;
                         listCmtItem.addAll(listAdd);
                         adapterCmt.setData(listCmtItem);
                     } else {
@@ -677,15 +642,13 @@ public class VideoContainDataFragment extends Fragment {
 
                     case R.id.mn_top_cmt:
                         resetData();
-                        LoadPage = 1;
+                        loadPage = 1;
                         callApiComment(idVideo, "", "relevance", "10");
-//                        adapter.setData(listCmtItem);
                         break;
                     case R.id.mn_new_first:
                         resetData();
-                        LoadPage = 2;
+                        loadPage = 2;
                         callApiComment(idVideo, "", "time", "10");
-//                        adapter.setData(listCmtItem);
                         break;
                 }
                 return false;
@@ -695,9 +658,7 @@ public class VideoContainDataFragment extends Fragment {
     }
     private void resetData() {
         currenPage = 1;
-        listCmtItem = new ArrayList<>();
-        isLoading = false;
-        isLastPage = false;
+        listCmtItem = null;
         pageToken = "";
         totalPage = 5;
         listAddS = new ArrayList<>();
@@ -708,7 +669,7 @@ public class VideoContainDataFragment extends Fragment {
 
     private void resetDataR() {
         currentPageR = 1;
-        listReplies = new ArrayList<>();
+        listReplies = null;
         isLoadingR = false;
         isLastPageR = false;
         totalPageR = 5;

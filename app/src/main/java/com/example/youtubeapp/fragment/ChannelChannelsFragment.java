@@ -1,6 +1,5 @@
 package com.example.youtubeapp.fragment;
 
-import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -16,7 +15,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.youtubeapp.R;
-import com.example.youtubeapp.activitys.ChannelActivity;
+import com.example.youtubeapp.activitys.MainActivity;
 import com.example.youtubeapp.adapter.ListChannelAdapter;
 import com.example.youtubeapp.api.ApiServicePlayList;
 import com.example.youtubeapp.model.infochannel.Channel;
@@ -26,9 +25,7 @@ import com.example.youtubeapp.model.listchannelsfromchannel.ChannelsList;
 import com.example.youtubeapp.model.listchannelsfromchannel.Items;
 import com.example.youtubeapp.my_interface.IItemOnClickChannelListener;
 import com.example.youtubeapp.utiliti.Util;
-import com.squareup.picasso.Picasso;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 import retrofit2.Call;
@@ -42,10 +39,12 @@ public class ChannelChannelsFragment extends Fragment implements SwipeRefreshLay
     ArrayList<ChannelItem> listItems;
     SwipeRefreshLayout srlLoad;
     TextView tvNotFeature;
+    MainActivity mainActivity;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_channel_channels, container, false);
+        mainActivity = (MainActivity) getActivity();
         getBundle();
         tvNotFeature = view.findViewById(R.id.tv_not_channels);
         srlLoad = view.findViewById(R.id.srl_reload_data_channel);
@@ -58,14 +57,16 @@ public class ChannelChannelsFragment extends Fragment implements SwipeRefreshLay
         adapter = new ListChannelAdapter(new IItemOnClickChannelListener() {
             @Override
             public void onClickOpenChannel(String idChannel, String titleChannel) {
-                Intent openToChannel = new Intent(getActivity(), ChannelActivity.class);
-                openToChannel.putExtra(Util.EXTRA_ID_CHANNEL_TO_CHANNEL, idChannel);
-                openToChannel.putExtra(Util.EXTRA_TITLE_CHANNEL_TO_CHANNEL, titleChannel);
-                startActivity(openToChannel);
+//                Intent openToChannel = new Intent(getActivity(), ChannelActivity.class);
+//                openToChannel.putExtra(Util.EXTRA_ID_CHANNEL_TO_CHANNEL, idChannel);
+//                openToChannel.putExtra(Util.EXTRA_TITLE_CHANNEL_TO_CHANNEL, titleChannel);
+//                startActivity(openToChannel);
+                mainActivity.addFragmentChannel(idChannel, titleChannel);
             }
         });
         rvChannelList.setAdapter(adapter);
         callApiGetListChannel(idChannel);
+
 
         adapter.setData(listItems);
 

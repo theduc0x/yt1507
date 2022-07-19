@@ -1,38 +1,18 @@
 package com.example.youtubeapp.utiliti;
 
-import android.app.Activity;
-import android.content.Intent;
 import android.os.Build;
-import android.util.Log;
-import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
 
-import com.example.youtubeapp.activitys.ChannelActivity;
-import com.example.youtubeapp.api.ApiServicePlayList;
-import com.example.youtubeapp.model.itemrecycleview.CommentItem;
-import com.example.youtubeapp.model.itemrecycleview.RepliesCommentItem;
-import com.example.youtubeapp.model.itemrecycleview.VideoItem;
-import com.example.youtubeapp.model.listcomment.Comment;
-import com.example.youtubeapp.model.listcomment.ItemsComment;
-import com.example.youtubeapp.model.listcomment.RepliesComment;
-
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
 import java.util.Date;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-
 public class Util {
-    final public static String API_KEY = "AIzaSyCvdkceXbTQYl0VU9YH_xaDwLPiJ7GjCgM";
+    final public static String API_KEY = "AIzaSyAbvtmmDLsgGdKMB2Lqa6vDXZhYd7QFkC4";
     final public static String ID_PLAYLIST = "PL8A83124F1D79BD4F";
     final public static String urlListVideoMostPopular = "https://youtube.googleapis.com/youtube/v3/videos?part=snippet&part=statistics&chart=mostPopular&locale=vn&regionCode=vn&key=AIzaSyDkEdU_hnItFhVO0yDBS758w4FFDIWDuzg&maxResults=50";
     public static int REQUEST_CODE_VIDEO = 123;
@@ -64,7 +44,9 @@ public class Util {
     public static String TAG_SUB = "fragSub";
     public static String TAG_NOTIFI = "fragNotifi";
     public static String TAG_LIBRARY = "fragLibrary";
-
+    public static String TAG_CHANNEL = "fragChannel";
+    public static String TAG_SEARCH = "fragSearch";
+    public static String TAG_RESULTS_SEARCH = "fragResultsSearch";
     public static String nextPageToken = "";
 
     public static final int VIEW_TYPE_ITEM = 0, VIEW_TYPE_LOADING = 1;

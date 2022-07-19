@@ -39,6 +39,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/black"
+                android:autoLink="web"
+                android:textColorLink="@color/blue"
                 android:text="@string/tv_test_content_desc"/>
 
 <!--            <TextView-->
@@ -80,8 +82,10 @@
                     android:id="@+id/tv_link_youtube_detail"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/black"
                     android:layout_marginStart="@dimen/_6sdp"
+                    android:textColor="@color/black"
+                    android:textColorLink="@color/blue"
+                    android:autoLink="web"
                     android:text="@string/tv_link_youtube_test"/>
 
             </LinearLayout>

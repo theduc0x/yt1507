@@ -1,6 +1,5 @@
 package com.example.youtubeapp.fragment;
 
-import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -17,7 +16,6 @@ import com.example.youtubeapp.R;
 import com.example.youtubeapp.activitys.MainActivity;
 import com.example.youtubeapp.model.itemrecycleview.SearchItem;
 import com.example.youtubeapp.utiliti.Util;
-import com.example.youtubeapp.activitys.VideoPlayActivity;
 import com.example.youtubeapp.adapter.RelatedVideoAdapter;
 import com.example.youtubeapp.api.ApiServicePlayList;
 import com.example.youtubeapp.model.infochannel.Channel;

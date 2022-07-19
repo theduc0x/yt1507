@@ -1,33 +1,36 @@
-package com.example.youtubeapp.activitys;
+package com.example.youtubeapp.fragment;
 
-import androidx.appcompat.app.AppCompatActivity;
+import android.os.Bundle;
+
 import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.content.Intent;
-import android.os.Bundle;
 import android.os.Handler;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.youtubeapp.R;
-import com.example.youtubeapp.model.itemrecycleview.SearchItem;
-import com.example.youtubeapp.utiliti.Util;
+import com.example.youtubeapp.activitys.MainActivity;
 import com.example.youtubeapp.adapter.PlayListItemVideoChannelAdapter;
 import com.example.youtubeapp.api.ApiServicePlayList;
 import com.example.youtubeapp.model.detailvideo.DetailVideo;
 import com.example.youtubeapp.model.detailvideo.ItemVideo;
 import com.example.youtubeapp.model.itemrecycleview.ItemVideoInPlayList;
 import com.example.youtubeapp.model.itemrecycleview.PlayListItem;
+import com.example.youtubeapp.model.itemrecycleview.SearchItem;
 import com.example.youtubeapp.model.itemrecycleview.VideoItem;
 import com.example.youtubeapp.model.playlistitem.Items;
 import com.example.youtubeapp.model.playlistitem.PlayListItemVideo;
 import com.example.youtubeapp.my_interface.IItemOnClickVideoListener;
 import com.example.youtubeapp.my_interface.PaginationScrollListener;
+import com.example.youtubeapp.utiliti.Util;
 
 import java.util.ArrayList;
 
@@ -35,7 +38,8 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class VideoPlayListActivity extends AppCompatActivity {
+public class PlayListVideoFragment extends Fragment {
+    public static final String TAG = PlayListVideoFragment.class.getName();
     String idPlayList, videoCount, titlePlayList, titleChannel;
     TextView tvTitlePlayListTB, tvTitlePlayList, tvTitleChannel,
             tvVideoCount;
@@ -46,6 +50,7 @@ public class VideoPlayListActivity extends AppCompatActivity {
     Toolbar tbPlayListVideo;
     ImageButton ivBack;
     LinearLayout llOpenVideo;
+    MainActivity mainActivity;
 
     private String pageToken = "";
     private boolean isLoading;
@@ -54,32 +59,34 @@ public class VideoPlayListActivity extends AppCompatActivity {
     private int currenPage = 1;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_video_play_list);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_play_list_video, container, false);
         getData();
-        initView();
+        initView(view);
         setData();
         ivBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onBackPressed();
+                getParentFragmentManager().popBackStack();
             }
         });
         listItems = new ArrayList<>();
 
         LinearLayoutManager linearLayoutManager =
-                new LinearLayoutManager(this, RecyclerView.VERTICAL, false);
+                new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false);
         rvListVideo.setLayoutManager(linearLayoutManager);
         adapter = new PlayListItemVideoChannelAdapter(new IItemOnClickVideoListener() {
             @Override
             public void OnClickItemVideo(VideoItem item) {
-                Intent toPlayVideo = new Intent(VideoPlayListActivity.this, VideoPlayActivity.class);
-                Bundle bundle = new Bundle();
-                bundle.putSerializable(Util.BUNDLE_EXTRA_OBJECT_ITEM_VIDEO, item);
-                bundle.putString(Util.EXTRA_KEY_ITEM_VIDEO, "Video");
-                toPlayVideo.putExtras(bundle);
-                startActivity(toPlayVideo);
+//                Intent toPlayVideo = new Intent(VideoPlayListActivity.this, VideoPlayActivity.class);
+//                Bundle bundle = new Bundle();
+//                bundle.putSerializable(Util.BUNDLE_EXTRA_OBJECT_ITEM_VIDEO, item);
+//                bundle.putString(Util.EXTRA_KEY_ITEM_VIDEO, "Video");
+//                toPlayVideo.putExtras(bundle);
+//                startActivity(toPlayVideo);
+                mainActivity.setResetVideo();
+                mainActivity.setDataVideoPlay(item.getIdVideo(), item, null);
             }
         });
         rvListVideo.setAdapter(adapter);
@@ -101,8 +108,8 @@ public class VideoPlayListActivity extends AppCompatActivity {
                 return isLastPage;
             }
         });
+        return view;
     }
-
     private void setFirstData() {
         listItems = null;
         callApiListVideoInPlayList(pageToken, idPlayList, "10");
@@ -120,27 +127,24 @@ public class VideoPlayListActivity extends AppCompatActivity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                Toast.makeText(getBaseContext(), "Load Page" + currenPage, Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "Load Page" + currenPage, Toast.LENGTH_SHORT).show();
                 callApiListVideoInPlayList(pageToken, idPlayList, "10");
                 isLoading = false;
             }
-        },1000);
+        },500);
     }
 
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-    }
 
-    private void initView() {
-        tvTitlePlayListTB = findViewById(R.id.tv_title_play_list_video);
-        tvTitlePlayList = findViewById(R.id.title_playlist_detail);
-        tvTitleChannel = findViewById(R.id.tv_title_channel_detail);
-        tvVideoCount = findViewById(R.id.tv_view_count_detail);
-        rvListVideo = findViewById(R.id.rv_item_video_playList);
-        tbPlayListVideo = findViewById(R.id.tb_nav_play_list_video);
-        ivBack = findViewById(R.id.ib_back_playlist);
-        llOpenVideo = findViewById(R.id.ll_open_video_play_from_listplay);
+    private void initView(View view) {
+        tvTitlePlayListTB = view.findViewById(R.id.tv_title_play_list_video);
+        tvTitlePlayList = view.findViewById(R.id.title_playlist_detail);
+        tvTitleChannel = view.findViewById(R.id.tv_title_channel_detail);
+        tvVideoCount = view.findViewById(R.id.tv_view_count_detail);
+        rvListVideo = view.findViewById(R.id.rv_item_video_playList);
+        tbPlayListVideo = view.findViewById(R.id.tb_nav_play_list_video);
+        ivBack = view.findViewById(R.id.ib_back_playlist);
+        llOpenVideo = view.findViewById(R.id.ll_open_video_play_from_listplay);
+        mainActivity = (MainActivity) getActivity();
     }
     private void setData() {
         tvTitlePlayList.setText(titlePlayList);
@@ -149,8 +153,7 @@ public class VideoPlayListActivity extends AppCompatActivity {
     }
 
     private void getData() {
-        Intent getDataPlayList = getIntent();
-        Bundle bundleRe = getDataPlayList.getExtras();
+        Bundle bundleRe = getArguments();
         if (bundleRe != null) {
             String key = bundleRe.getString(Util.EXTRA_KEY_ITEM_PLAYLIST);
             if (key.equals("Search")) {
@@ -166,7 +169,6 @@ public class VideoPlayListActivity extends AppCompatActivity {
                 titlePlayList = item.getTitleVideo();
                 titleChannel = item.getTitleChannel();
             }
-
         }
     }
 
@@ -212,13 +214,13 @@ public class VideoPlayListActivity extends AppCompatActivity {
                         } else {
                             urlThumbnails = getString(R.string.url_image_transparent);
                         }
-                            callApiViewCountVideo(idVideo, listAdd, i);
+                        callApiViewCountVideo(idVideo, listAdd, i);
                         titleChannel = listItem.get(i).getSnippet().getChannelTitle();
                         titleVideo = listItem.get(i).getSnippet().getTitle();
                         publishAt = listItem.get(i).getSnippet().getPublishedAt();
 
-                            listAdd.add(new ItemVideoInPlayList(urlThumbnails, titleVideo,
-                                    titleChannel, "",publishAt, idVideo, privacyStatus));
+                        listAdd.add(new ItemVideoInPlayList(urlThumbnails, titleVideo,
+                                titleChannel, "",publishAt, idVideo, privacyStatus));
                     }
                     if (listItems == null) {
                         listItems = listAdd;
@@ -251,15 +253,15 @@ public class VideoPlayListActivity extends AppCompatActivity {
         ).enqueue(new Callback<DetailVideo>() {
             @Override
             public void onResponse(Call<DetailVideo> call, Response<DetailVideo> response) {
-                    String viewCount = "";
-                    DetailVideo video = response.body();
-                    if (video != null) {
-                        ArrayList<ItemVideo> listItem = video.getItems();
-                        for (int i = 0; i <listItem.size(); i++ ) {
-                            viewCount = listItem.get(0).getStatistics().getViewCount();
-                            listItemV.get(pos).setViewCountVideo(viewCount);
-                            adapter.notifyDataSetChanged();
-                        }
+                String viewCount = "";
+                DetailVideo video = response.body();
+                if (video != null) {
+                    ArrayList<ItemVideo> listItem = video.getItems();
+                    for (int i = 0; i <listItem.size(); i++ ) {
+                        viewCount = listItem.get(0).getStatistics().getViewCount();
+                        listItemV.get(pos).setViewCountVideo(viewCount);
+                        adapter.notifyDataSetChanged();
+                    }
                 }
             }
 

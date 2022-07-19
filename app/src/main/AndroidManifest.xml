@@ -25,18 +25,6 @@
         android:largeHeap="true"
         tools:targetApi="31" >
         <activity
-            android:name=".activitys.VideoPlayListActivity"
-            android:exported="false"
-            android:label="@string/title_activity_video_play_list"
-            android:theme="@style/Theme.YoutubeApp" />
-        <activity
-            android:name=".activitys.ChannelActivity"
-            android:exported="false" />
-        <activity
-            android:name=".activitys.VideoPlayActivity"
-            android:configChanges="screenSize|orientation"
-            android:exported="false" />
-        <activity
             android:name=".activitys.MainActivity"
             android:exported="true" >
             <intent-filter>

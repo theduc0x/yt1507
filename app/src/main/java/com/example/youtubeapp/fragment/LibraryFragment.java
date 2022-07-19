@@ -10,13 +10,17 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.example.youtubeapp.R;
+import com.example.youtubeapp.activitys.MainActivity;
 
 public class LibraryFragment extends Fragment {
+    MainActivity mainActivity;
     public static final String TAG = LibraryFragment.class.getName();
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
-        return inflater.inflate(R.layout.fragment_library, container, false);
+        View view = inflater.inflate(R.layout.fragment_library, container, false);
+        mainActivity = (MainActivity) getActivity();
+        mainActivity.setToolBarMainVisible();
+        return view;
     }
 }

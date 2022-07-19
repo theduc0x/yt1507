@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.youtubeapp.R;
+import com.example.youtubeapp.activitys.MainActivity;
 import com.example.youtubeapp.adapter.ShortsVideoAdapter;
 import com.example.youtubeapp.api.ApiServicePlayList;
 import com.example.youtubeapp.model.detailvideo.DetailVideo;
@@ -45,13 +46,18 @@ public class ShortsFragment extends Fragment {
     String pageToken = "";
     List<ExoPlayerItem> listItem;
     ViewPager2 vp2Video;
+    MainActivity mainActivity;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_shorts, container, false);
         vp2Video = view.findViewById(R.id.vp2_shorts_video);
+        mainActivity = (MainActivity) getActivity();
         listItems = new ArrayList<>();
         listItem = new ArrayList<>();
+
+        mainActivity.setToolBarMainInvisible();
+
         calLApiVideoShortRandom(pageToken, "20", null);
         adapter = new ShortsVideoAdapter(getContext(), new OnVideoPreparedListener() {
             @Override
@@ -92,7 +98,6 @@ public class ShortsFragment extends Fragment {
                     player.pause();
                     player.setPlayWhenReady(false);
                 }
-
                 int indexPos = 0;
                 Iterator var17 = listItem.listIterator();
                 while(true) {
@@ -100,7 +105,6 @@ public class ShortsFragment extends Fragment {
                         var10000 = -1;
                         break;
                     }
-
                     ExoPlayerItem item = (ExoPlayerItem) var17.next();
                     if (item.getPosition() == position) {
                         var10000 = indexPos;
@@ -111,6 +115,8 @@ public class ShortsFragment extends Fragment {
 
                 int newIndex = var10000;
                 if (newIndex != -1) {
+                    mainActivity.tbHide();
+                    mainActivity.setToolBarMainInvisible();
                     ExoPlayer playerx = listItem.get(newIndex).getExoPlayer();
                     playerx.setPlayWhenReady(true);
                     playerx.play();
