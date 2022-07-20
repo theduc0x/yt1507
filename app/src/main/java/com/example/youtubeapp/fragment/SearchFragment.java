@@ -156,7 +156,8 @@ public class SearchFragment extends Fragment {
         ibBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getActivity().onBackPressed();
+                getParentFragmentManager().popBackStack();
+                mainActivity.setToolBarMainVisible();
             }
         });
     }

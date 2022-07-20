@@ -2,6 +2,7 @@ package com.example.youtubeapp.fragment;
 
 import android.os.Bundle;
 
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -60,9 +61,11 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     private int currenPage = 1;
     private String categoryId = "0";
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        Log.d("duck", "onCreateView");
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         listVideoItem = new ArrayList<>();
         rvItemVideo = view.findViewById(R.id.rv_item_video);
@@ -70,6 +73,7 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         srlReloadData.setOnRefreshListener(this);
         mainActivity = (MainActivity) getActivity();
         llCategory = view.findViewById(R.id.ll_category);
+        pageToken = "";
         mainActivity.setToolBarMainVisible();
 
         callCategory("vn");
@@ -143,6 +147,20 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         });
         return view;
     }
+
+//    @Override
+//    public void onPause() {
+//        super.onPause();
+//        if (getParentFragmentManager().findFragmentByTag(Util.TAG_HOME) != null)
+//            getParentFragmentManager().findFragmentByTag(Util.TAG_HOME).setRetainInstance(true);
+//    }
+//
+//    @Override
+//    public void onResume() {
+//        super.onResume();
+//        if (getParentFragmentManager().findFragmentByTag(Util.TAG_HOME) != null)
+//            getParentFragmentManager().findFragmentByTag(Util.TAG_HOME).getRetainInstance();
+//    }
 
     private void setFirstData() {
         listVideoItem = null;
@@ -264,7 +282,6 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
 
                 }
             }
-
             // Nếu lỗi sẽ thông báo lỗi
             @Override
             public void onFailure(Call<ListVideo> call, Throwable t) {
@@ -276,7 +293,6 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
 
     // Lên đầu trang home
     public void topRecycleView() {
-
         rvItemVideo.smoothScrollToPosition(0);
     }
     public void topRecycleViewFast() {

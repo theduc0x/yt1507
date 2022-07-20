@@ -23,6 +23,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.youtubeapp.R;
+import com.example.youtubeapp.fragment.BottomSheetDialogUserFragment;
 import com.example.youtubeapp.fragment.ChannelFragment;
 import com.example.youtubeapp.fragment.PlayListVideoFragment;
 import com.example.youtubeapp.fragment.ShortsFragment;
@@ -89,6 +90,9 @@ public class MainActivity extends AppCompatActivity implements YouTubePlayer.OnI
         tvTitleChannel = findViewById(R.id.tv_title_channel_resize);
         tvTitleVideo = findViewById(R.id.tv_title_video_resize);
         ivDelete = findViewById(R.id.iv_delete_resize);
+
+//        homeFragment = new HomeFragment();
+
         // Add sẵn các fragment
         fm.beginTransaction().add(R.id.fl_content, libraryFragment, Util.TAG_LIBRARY)
                 .hide(libraryFragment).commit();
@@ -97,9 +101,15 @@ public class MainActivity extends AppCompatActivity implements YouTubePlayer.OnI
         fm.beginTransaction().add(R.id.fl_content, subcriptionFragment, Util.TAG_SUB)
                 .hide(subcriptionFragment).commit();
         fm.beginTransaction().add(R.id.fl_content, shortsFragment, Util.TAG_SHORTS)
-                .hide(shortsFragment).commit();
-        fm.beginTransaction().add(R.id.fl_content, homeFragment, Util.TAG_HOME)
+                .addToBackStack(ShortsFragment.TAG)
+//                .hide(shortsFragment)
                 .commit();
+        fm.beginTransaction().hide(shortsFragment).commit();
+        fm.beginTransaction().add(R.id.fl_content, homeFragment, Util.TAG_HOME)
+                .addToBackStack(HomeFragment.TAG)
+                .commit();
+
+
 
         bnvFragment.getMenu().findItem(R.id.mn_home).setChecked(true);
 
@@ -109,6 +119,7 @@ public class MainActivity extends AppCompatActivity implements YouTubePlayer.OnI
                     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                         switch (item.getItemId()) {
                             case R.id.mn_home:
+                                setToolBarMainVisible();
                                 if (item.isChecked()) {
                                     homeFragment = (HomeFragment) getSupportFragmentManager()
                                             .findFragmentByTag(Util.TAG_HOME);
@@ -118,16 +129,16 @@ public class MainActivity extends AppCompatActivity implements YouTubePlayer.OnI
                                     } else {
                                         homeFragment.topRecycleView();
                                     }
-                                } else {
+                                }
                                     setToolBarMainVisible();
-                                    fm.beginTransaction().hide(active).addToBackStack(Util.TAG_HOME)
+                                    fm.beginTransaction().hide(active)
+//                                            .addToBackStack(Util.TAG_HOME)
                                             .show(homeFragment).commit();
                                     active = homeFragment;
-                                }
 
-                                homeFragment = (HomeFragment) getSupportFragmentManager()
-                                        .findFragmentByTag(Util.TAG_HOME);
-                                if (!homeFragment.isVisible() ) {
+                                if (!homeFragment.isInLayout()) {
+                                    Log.d("aaaaa", "co");
+                                    setToolBarMainVisible();
                                     getSupportFragmentManager().popBackStack(HomeFragment.TAG, 0);
                                 }
 
@@ -136,28 +147,47 @@ public class MainActivity extends AppCompatActivity implements YouTubePlayer.OnI
                             case R.id.mn_explore:
                                 setToolBarMainInvisible();
                                 tbHide();
-                                fm.beginTransaction().hide(active).addToBackStack(Util.TAG_SHORTS)
+//                                shortsFragment =
+//                                        (ShortsFragment) getSupportFragmentManager()
+//                                                .findFragmentByTag(Util.TAG_SHORTS);
+                                fm.beginTransaction().hide(active)
+//                                        .addToBackStack(Util.TAG_SHORTS)
                                         .show(shortsFragment).commit();
                                 active = shortsFragment;
+
+//
+//                                if (!shortsFragment.isInLayout()) {
+//                                    Log.d("aaaaaa", "co");
+//                                    getSupportFragmentManager().popBackStack(ShortsFragment.TAG, 0);
+//                                }
                                 return true;
 
                             case R.id.mn_subcription:
                                 setToolBarMainVisible();
-                                fm.beginTransaction().hide(active).addToBackStack(Util.TAG_SUB)
-                                        .show(subcriptionFragment).commit();
-                                active = subcriptionFragment;
+//                                if (subcriptionFragment.isVisible()) {
+                                    fm.beginTransaction().hide(active)
+//                                            .addToBackStack(Util.TAG_SUB)
+                                            .show(subcriptionFragment).commit();
+                                    active = subcriptionFragment;
+//                                } else {
+//                                SubcriptionFragment subcriptionFragmentR =
+//                                        (SubcriptionFragment) getSupportFragmentManager()
+//                                                .findFragmentByTag(Util.TAG_SUB);
+
                                 return true;
 
                             case R.id.mn_notification:
                                 setToolBarMainVisible();
-                                fm.beginTransaction().hide(active).addToBackStack(Util.TAG_NOTIFI)
+                                fm.beginTransaction().hide(active)
+//                                        .addToBackStack(Util.TAG_NOTIFI)
                                         .show(notificationFragment).commit();
                                 active = notificationFragment;
                                 return true;
 
                             case R.id.mn_library:
                                 setToolBarMainVisible();
-                                fm.beginTransaction().hide(active).addToBackStack(Util.TAG_LIBRARY)
+                                fm.beginTransaction().hide(active)
+//                                        .addToBackStack(Util.TAG_LIBRARY)
                                         .show(libraryFragment).commit();
                                 active = libraryFragment;
                                 return true;
@@ -175,6 +205,9 @@ public class MainActivity extends AppCompatActivity implements YouTubePlayer.OnI
                     case R.id.mn_search:
                         addFragmentSearch("");
                         break;
+                    case R.id.mn_account:
+                        openBottomSheetDiaLogLogin();
+                        break;
 
                 }
                 return false;
@@ -190,14 +223,15 @@ public class MainActivity extends AppCompatActivity implements YouTubePlayer.OnI
         });
     }
 
+
     // add phần tìm kiếm
     public void addFragmentSearch(String s) {
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         setToolBarMainInvisible();
         bnvFragment.setVisibility(View.GONE);
         SearchFragment searchFragment = new SearchFragment();
         Bundle bundle = new Bundle();
         bundle.putString(Util.BUNDLE_EXTRA_TEXT_EDITTEXT, s);
-        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         searchFragment.setArguments(bundle);
         fragmentTransaction.replace(R.id.fl_content, searchFragment, Util.TAG_SEARCH);
         fragmentTransaction.addToBackStack(SearchFragment.TAG);
@@ -206,6 +240,7 @@ public class MainActivity extends AppCompatActivity implements YouTubePlayer.OnI
 
     // open fragment channel
     public void addFragmentChannel(String idChannel, String titleChannel) {
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         ablHome.setVisibility(View.VISIBLE);
         tbDisPlay();
         tbNav.setVisibility(View.GONE);
@@ -213,36 +248,36 @@ public class MainActivity extends AppCompatActivity implements YouTubePlayer.OnI
         Bundle bundle = new Bundle();
         bundle.putString(Util.EXTRA_ID_CHANNEL_TO_CHANNEL, idChannel);
         bundle.putString(Util.EXTRA_TITLE_CHANNEL_TO_CHANNEL, titleChannel);
-        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         channelFragment.setArguments(bundle);
         fragmentTransaction.replace(R.id.fl_content, channelFragment, Util.TAG_CHANNEL);
         fragmentTransaction.addToBackStack(ChannelFragment.TAG);
         fragmentTransaction.commit();
+
         Log.d("sadjdaksa", getSupportFragmentManager().getBackStackEntryCount()+"");
     }
 
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        HomeFragment fragmentH =
-                (HomeFragment) getSupportFragmentManager().findFragmentByTag(Util.TAG_HOME);
-        ShortsFragment fragmentS =
-                (ShortsFragment) getSupportFragmentManager().findFragmentByTag(Util.TAG_SHORTS);
-        SubcriptionFragment fragmentSup =
-                (SubcriptionFragment) getSupportFragmentManager().findFragmentByTag(Util.TAG_SUB);
-        NotificationFragment fragmentN =
-                (NotificationFragment) getSupportFragmentManager().findFragmentByTag(Util.TAG_NOTIFI);
-        LibraryFragment fragmentL =
-                (LibraryFragment) getSupportFragmentManager().findFragmentByTag(Util.TAG_LIBRARY);
-
-        if (fragmentS != null && fragmentS.isVisible()) {
-            bnvFragment.getMenu().findItem(R.id.mn_explore).setChecked(true);
-        }
-
-        back(fragmentH, R.id.mn_home);
-        back(fragmentSup, R.id.mn_subcription);
-        back(fragmentN, R.id.mn_notification);
-        back(fragmentL, R.id.mn_library);
+//        HomeFragment fragmentH =
+//                (HomeFragment) getSupportFragmentManager().findFragmentByTag(Util.TAG_HOME);
+//        ShortsFragment fragmentS =
+//                (ShortsFragment) getSupportFragmentManager().findFragmentByTag(Util.TAG_SHORTS);
+//        SubcriptionFragment fragmentSup =
+//                (SubcriptionFragment) getSupportFragmentManager().findFragmentByTag(Util.TAG_SUB);
+//        NotificationFragment fragmentN =
+//                (NotificationFragment) getSupportFragmentManager().findFragmentByTag(Util.TAG_NOTIFI);
+//        LibraryFragment fragmentL =
+//                (LibraryFragment) getSupportFragmentManager().findFragmentByTag(Util.TAG_LIBRARY);
+//
+//        if (fragmentS != null && fragmentS.isVisible()) {
+//            bnvFragment.getMenu().findItem(R.id.mn_explore).setChecked(true);
+//        }
+//
+//        back(fragmentH, R.id.mn_home);
+//        back(fragmentSup, R.id.mn_subcription);
+//        back(fragmentN, R.id.mn_notification);
+//        back(fragmentL, R.id.mn_library);
     }
     // Xem hiện đang ở menu nào, nếu đúng là menu đó thì cho nút menu chuyển thành màu đỏ
     private void back(Fragment fragment, int id) {
@@ -279,7 +314,11 @@ public class MainActivity extends AppCompatActivity implements YouTubePlayer.OnI
 
     public void setToolBarMainInvisible() {
         tbNav.setVisibility(View.GONE);
-
+    }
+    public void setBnvVisible() {
+        if (bnvFragment.getVisibility() == View.GONE) {
+            bnvFragment.setVisibility(View.VISIBLE);
+        }
     }
 
     public void tbHide() {
@@ -465,5 +504,10 @@ public class MainActivity extends AppCompatActivity implements YouTubePlayer.OnI
                             youTubeInitializationResult.toString());
             Toast.makeText(this, errorMessage, Toast.LENGTH_LONG).show();
         }
+    }
+    private void openBottomSheetDiaLogLogin() {
+        BottomSheetDialogUserFragment sheetDialogUserFragment =
+                BottomSheetDialogUserFragment.newInstance();
+        sheetDialogUserFragment.show(getSupportFragmentManager(), BottomSheetDialogUserFragment.TAG);
     }
 }

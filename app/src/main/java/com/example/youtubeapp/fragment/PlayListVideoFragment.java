@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Handler;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
@@ -106,6 +107,17 @@ public class PlayListVideoFragment extends Fragment {
             @Override
             public boolean isLastPage() {
                 return isLastPage;
+            }
+        });
+
+        tbPlayListVideo.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.mn_search_channel:
+                        mainActivity.addFragmentSearch("");
+                }
+                return false;
             }
         });
         return view;

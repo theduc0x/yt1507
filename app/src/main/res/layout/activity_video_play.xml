@@ -47,18 +47,25 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
+            android:layout_marginStart="@dimen/_10sdp"
             android:visibility="gone">
             <TextView
                 android:id="@+id/tv_title_video_resize"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/black"
+                android:textSize="@dimen/_11sdp"
+                android:maxLines="4"
+                android:ellipsize="end"
                 android:text="Đêm đà lạt"/>
 
             <TextView
                 android:id="@+id/tv_title_channel_resize"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textSize="@dimen/_10sdp"
+                android:maxLines="1"
+                android:ellipsize="end"
                 android:text="ậksda"/>
         </LinearLayout>
 

@@ -12,14 +12,10 @@ import java.time.temporal.ChronoUnit;
 import java.util.Date;
 
 public class Util {
-    final public static String API_KEY = "AIzaSyAbvtmmDLsgGdKMB2Lqa6vDXZhYd7QFkC4";
-    final public static String ID_PLAYLIST = "PL8A83124F1D79BD4F";
-    final public static String urlListVideoMostPopular = "https://youtube.googleapis.com/youtube/v3/videos?part=snippet&part=statistics&chart=mostPopular&locale=vn&regionCode=vn&key=AIzaSyDkEdU_hnItFhVO0yDBS758w4FFDIWDuzg&maxResults=50";
+    final public static String API_KEY = "AIzaSyDMV8e1aPB63Xwgi506dtDyzf6PrlQWCrw";
     public static int REQUEST_CODE_VIDEO = 123;
     public static int REQUEST_CODE_SORT_VIDEO = 111;
     public static String BUNDLE_EXTRA_OBJECT_ITEM_VIDEO = "extra item video";
-    public static String BUNDLE_EXTRA_OBJECT_ITEM_VIDEO_FROM_RELATED = "extra item video related";
-    public static String BUNDLE_EXTRA_ITEM_VIDEO_TO_REPLIES = "extra item video replies";
     public static String BUNDLE_EXTRA_ITEM_VIDEO_TO_REPLIES_INSIDE = "extra item video repliess";
     public static String BUNDLE_EXTRA_ITEM_VIDEO = "extra item v video";
     public static String BUNDLE_EXTRA_ITEM_VIDEO_SEARCH = "extra item v video search";

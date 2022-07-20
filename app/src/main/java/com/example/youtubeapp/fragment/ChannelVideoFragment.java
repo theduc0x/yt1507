@@ -61,6 +61,7 @@ public class ChannelVideoFragment extends Fragment implements IItemOnClickSortLi
         rvListVideo = view.findViewById(R.id.rv_list_video_channel);
         tvClickName = view.findViewById(R.id.tv_sort_video_channel);
         llOpenSort = view.findViewById(R.id.ll_sort_video_channel);
+        pageToken = "";
         mainActivity = (MainActivity) getActivity();
         listItems = new ArrayList<>();
         // lấy idChannel

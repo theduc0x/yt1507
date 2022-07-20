@@ -47,6 +47,7 @@ public class RelatedToVideoFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_related_to_video, container, false);
         initView(view);
+
         listItems = new ArrayList<>();
         Bundle bundleRe = getArguments();
         if (bundleRe != null) {
@@ -60,7 +61,7 @@ public class RelatedToVideoFragment extends Fragment {
                         (VideoItem) bundleRe.getSerializable(Util.BUNDLE_EXTRA_OBJECT_ITEM_VIDEO);
                 idVideoRe = itemVideo.getIdVideo();
             }
-            callApiRelatedVideo("", idVideoRe, "10");
+            callApiRelatedVideo("", idVideoRe, "30");
         }
 
             LinearLayoutManager linearLayoutManager =

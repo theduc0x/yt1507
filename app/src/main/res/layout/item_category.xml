@@ -12,11 +12,10 @@
         app:layout_constraintTop_toTopOf="parent"
         android:clickable="true"
         android:focusable="true"
-
         android:background="@drawable/custom_category"
         android:layout_marginStart="@dimen/_16sdp"
-        android:text="Gaming"
         android:textAllCaps="false"
+        android:textSize="@dimen/_11sdp"
+        android:text="Gaming"
      />
-
 </androidx.constraintlayout.widget.ConstraintLayout>

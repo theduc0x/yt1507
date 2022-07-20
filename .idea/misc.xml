@@ -216,19 +216,26 @@
         <entry key="..\:/youtube1907/yt1507/app/src/main/res/layout/activity_video_play_list.xml" value="0.2591792656587473" />
         <entry key="..\:/youtube1907/yt1507/app/src/main/res/layout/fragment_bottom_sheet_comment.xml" value="0.12635869565217392" />
         <entry key="..\:/youtube1907/yt1507/app/src/main/res/layout/fragment_bottom_sheet_detail_replies.xml" value="0.20871327254305977" />
+        <entry key="..\:/youtube1907/yt1507/app/src/main/res/layout/fragment_bottom_sheet_dialog_user.xml" value="0.20871327254305977" />
         <entry key="..\:/youtube1907/yt1507/app/src/main/res/layout/fragment_channel.xml" value="0.20871327254305977" />
         <entry key="..\:/youtube1907/yt1507/app/src/main/res/layout/fragment_channel_about.xml" value="0.14722222222222223" />
         <entry key="..\:/youtube1907/yt1507/app/src/main/res/layout/fragment_channel_detail.xml" value="0.20871327254305977" />
         <entry key="..\:/youtube1907/yt1507/app/src/main/res/layout/fragment_detail_play_list.xml" value="0.19814814814814816" />
         <entry key="..\:/youtube1907/yt1507/app/src/main/res/layout/fragment_home.xml" value="0.20871327254305977" />
+        <entry key="..\:/youtube1907/yt1507/app/src/main/res/layout/fragment_notification.xml" value="0.20871327254305977" />
         <entry key="..\:/youtube1907/yt1507/app/src/main/res/layout/fragment_play_list_video.xml" value="0.20871327254305977" />
+        <entry key="..\:/youtube1907/yt1507/app/src/main/res/layout/fragment_related_to_video.xml" value="0.20871327254305977" />
         <entry key="..\:/youtube1907/yt1507/app/src/main/res/layout/fragment_search.xml" value="0.20871327254305977" />
         <entry key="..\:/youtube1907/yt1507/app/src/main/res/layout/fragment_search_results.xml" value="0.1580547112462006" />
         <entry key="..\:/youtube1907/yt1507/app/src/main/res/layout/fragment_shorts.xml" value="0.20871327254305977" />
+        <entry key="..\:/youtube1907/yt1507/app/src/main/res/layout/fragment_subcription.xml" value="0.20871327254305977" />
         <entry key="..\:/youtube1907/yt1507/app/src/main/res/layout/fragment_video_contain_data.xml" value="0.20871327254305977" />
+        <entry key="..\:/youtube1907/yt1507/app/src/main/res/layout/item_category.xml" value="0.20871327254305977" />
         <entry key="..\:/youtube1907/yt1507/app/src/main/res/layout/item_video_home.xml" value="0.33" />
+        <entry key="..\:/youtube1907/yt1507/app/src/main/res/layout/item_video_in_playlist.xml" value="0.20871327254305977" />
         <entry key="..\:/youtube1907/yt1507/app/src/main/res/layout/item_video_shorts.xml" value="0.20871327254305977" />
         <entry key="..\:/youtube1907/yt1507/app/src/main/res/menu/menu_close_replies.xml" value="0.27685185185185185" />
+        <entry key="..\:/youtube1907/yt1507/app/src/main/res/menu/menu_toolbar.xml" value="0.2898148148148148" />
       </map>
     </option>
   </component>

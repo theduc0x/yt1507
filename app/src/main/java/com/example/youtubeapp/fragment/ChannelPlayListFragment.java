@@ -58,6 +58,7 @@ public class ChannelPlayListFragment extends Fragment {
         rvPlayList = view.findViewById(R.id.rv_list_playlist_channel);
         llOpenSort = view.findViewById(R.id.ll_sort_playlist_channel);
         btOpenSort = view.findViewById(R.id.bt_sort_playlist_channel);
+        pageToken = "";
         mainActivity = (MainActivity) getActivity();
         listItems = new ArrayList<>();
         getBundle();

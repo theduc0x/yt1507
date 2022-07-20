@@ -498,6 +498,7 @@ public class SearchResultsFragment extends Fragment implements IItemClickFilterS
         tvSearch.setText(q);
         rvListSearch = view.findViewById(R.id.rv_list_search_results);
         llNoResults = view.findViewById(R.id.ll_no_results_search);
+        pageToken = "";
     }
 
     @Override

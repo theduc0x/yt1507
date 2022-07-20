@@ -47,9 +47,10 @@ public class ChannelFragment extends Fragment {
         ibBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (getParentFragmentManager() != null) {
-                    getParentFragmentManager().popBackStack();
-                }
+//                if (getParentFragmentManager() != null) {
+//                    getParentFragmentManager();
+//                }
+                mainActivity.onBackPressed();
             }
         });
         tbChannel.setVisibility(View.VISIBLE);

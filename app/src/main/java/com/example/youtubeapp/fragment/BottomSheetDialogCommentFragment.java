@@ -117,9 +117,9 @@ public class BottomSheetDialogCommentFragment extends BottomSheetDialogFragment 
         intMain(viewDialog);
         setDataComment();
 
-        bottomSheetDialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL,
-                WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL);
-        bottomSheetDialog.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+//        bottomSheetDialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL,
+//                WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL);
+//        bottomSheetDialog.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
 
         tbCommentVideo.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
