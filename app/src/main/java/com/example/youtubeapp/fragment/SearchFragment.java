@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
@@ -145,6 +146,55 @@ public class SearchFragment extends Fragment {
         return view;
     }
 
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        Log.d("duc1", "onAttackSearch");
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Log.d("duc1", "onResumeSearch");
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        Log.d("duc1", "onStartSearch");
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        Log.d("duc1", "onPauseSearch");
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        Log.d("duc1", "onStopSearch");
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Log.d("duc1", "onDestroySearch");
+        Util.FRAGMENT_CURRENT = 1;
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        Log.d("duc1", "onDetachSearch");
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        Log.d("duc1", "onDestroyviewSearch");
+    }
+
     private void initView(View view) {
         ibBack = view.findViewById(R.id.ib_back_search);
         etSearch = view.findViewById(R.id.et_search);
@@ -156,8 +206,10 @@ public class SearchFragment extends Fragment {
         ibBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getParentFragmentManager().popBackStack();
-                mainActivity.setToolBarMainVisible();
+                    getParentFragmentManager().popBackStack();
+                    if (Util.FRAGMENT_CURRENT == 1) {
+                        mainActivity.setToolBarMainVisible();
+                    }
             }
         });
     }
@@ -170,10 +222,8 @@ public class SearchFragment extends Fragment {
                 null, new com.android.volley.Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
-                Log.d("duc123", response.toString());
                 try {
                     Object string = response.get(1);
-                    Log.d("duc11", string.toString());
                     String s = string.toString();
                     JSONArray jsonArray = new JSONArray(s);
                     for (int i = 0; i < jsonArray.length(); i++) {

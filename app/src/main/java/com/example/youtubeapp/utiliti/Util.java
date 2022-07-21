@@ -12,7 +12,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.Date;
 
 public class Util {
-    final public static String API_KEY = "AIzaSyDMV8e1aPB63Xwgi506dtDyzf6PrlQWCrw";
+    final public static String API_KEY = "AIzaSyCSuwO7CyFNsdZ39rV62QWmU-DTDBbbbq4";
     public static int REQUEST_CODE_VIDEO = 123;
     public static int REQUEST_CODE_SORT_VIDEO = 111;
     public static String BUNDLE_EXTRA_OBJECT_ITEM_VIDEO = "extra item video";
@@ -43,7 +43,11 @@ public class Util {
     public static String TAG_CHANNEL = "fragChannel";
     public static String TAG_SEARCH = "fragSearch";
     public static String TAG_RESULTS_SEARCH = "fragResultsSearch";
+    public static String TAG_PLAYLIST_DETAIL = "fragPlayListDetail";
     public static String nextPageToken = "";
+
+    public static int FRAGMENT_CURRENT = 0;
+    public static boolean CHECK_LOAD_SHORTS = false;
 
     public static final int VIEW_TYPE_ITEM = 0, VIEW_TYPE_LOADING = 1;
 //  Chuyển đổi từ lượt view double sang K và M

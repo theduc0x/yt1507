@@ -218,18 +218,17 @@ public class ChannelPlayListFragment extends Fragment {
             public boolean onMenuItemClick(MenuItem item) {
                 switch(item.getItemId()) {
                     case R.id.mn_date_newest:
-                        currenPage = 1;
-//                        LoadPage = 1;
-//                        listCmtItem = null;
+//                        currenPage = 1;
+//                        loadPage = 1;
+//                        listItems = null;
 //                        callApiComment(idVideoM, "", "relevance", "10");
 //                        adapter.setData(listCmtItem);
                         break;
                     case R.id.mn_last_video_add:
-                        currenPage = 1;
-//                        LoadPage = 2;
-//                        listCmtItem = null;
+//                        currenPage = 1;
+//                        loadPage = 2;
+//                        listItems = null;
 //                        callApiComment(idVideoM, "", "time", "10");
-//                        adapter.setData(listCmtItem);
                         break;
                 }
                 return false;

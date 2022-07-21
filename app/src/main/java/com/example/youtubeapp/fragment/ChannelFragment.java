@@ -47,10 +47,14 @@ public class ChannelFragment extends Fragment {
         ibBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                if (getParentFragmentManager() != null) {
-//                    getParentFragmentManager();
-//                }
-                mainActivity.onBackPressed();
+                getParentFragmentManager().popBackStack();
+                if (Util.FRAGMENT_CURRENT == 1) {
+                    mainActivity.setToolBarMainVisible();
+                }
+
+
+
+//                mainActivity.onBackPressed();
             }
         });
         tbChannel.setVisibility(View.VISIBLE);
@@ -60,6 +64,8 @@ public class ChannelFragment extends Fragment {
             public boolean onMenuItemClick(MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.mn_search_channel:
+                        // Kiểm tra xem đang mở search từ fragment nào
+                        Util.FRAGMENT_CURRENT = 2;
                         mainActivity.addFragmentSearch("");
                 }
                 return false;

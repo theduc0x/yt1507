@@ -157,8 +157,12 @@ public class SearchResultsFragment extends Fragment implements IItemClickFilterS
             public void onClick(View v) {
                 // Dòng tiên để bỏ quay trở lại phần search
                 getParentFragmentManager().popBackStack();
+                getParentFragmentManager().popBackStack();
                 // Quay về main home
-                mainActivity.onBackPressed();
+                if (Util.FRAGMENT_CURRENT == 1) {
+                    mainActivity.setToolBarMainVisible();
+                }
+//                mainActivity.setToolBarMainVisible();
             }
         });
         // sự kiện click toolbar filter
@@ -166,11 +170,17 @@ public class SearchResultsFragment extends Fragment implements IItemClickFilterS
         return view;
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Util.FRAGMENT_CURRENT = 1;
+    }
+
     //  Xóa fragment search để khi quay trở lại thì trở lại trang main
     public void removeSearchFragment() {
         FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
         SearchFragment searchFragment
-                = (SearchFragment) getChildFragmentManager().findFragmentByTag("fragSearch");
+                = (SearchFragment) getChildFragmentManager().findFragmentByTag(Util.TAG_SEARCH);
         if (searchFragment != null) {
             transaction.remove(this);
             transaction.commit();

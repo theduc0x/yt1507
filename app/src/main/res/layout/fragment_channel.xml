@@ -6,9 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
-    android:elevation="@dimen/_8sdp">
-
-
+    >
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/abl_nav_channel"
         android:layout_width="match_parent"

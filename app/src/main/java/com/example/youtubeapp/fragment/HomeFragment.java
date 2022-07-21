@@ -1,7 +1,9 @@
 package com.example.youtubeapp.fragment;
 
+import android.content.Context;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DividerItemDecoration;
@@ -114,10 +116,10 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
 //                openToChannel.putExtra(Util.EXTRA_ID_CHANNEL_TO_CHANNEL, idChannel);
 //                openToChannel.putExtra(Util.EXTRA_TITLE_CHANNEL_TO_CHANNEL, titleChannel);
 //                startActivity(openToChannel);
+                    Util.FRAGMENT_CURRENT = 1;
                     mainActivity.addFragmentChannel(idChannel, titleChannel);
             }
         });
-
         LinearLayoutManager linearLayoutManagerr =
                 new LinearLayoutManager(getActivity(), RecyclerView.VERTICAL, false);
         RecyclerView.ItemDecoration decoration =
@@ -148,7 +150,67 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         return view;
     }
 
-//    @Override
+    @Override
+    public void onPause() {
+        super.onPause();
+        Log.d("duc1", "onPause1");
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        Log.d("duc1", "onStop1");
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        Log.d("duc1", "onStart1");
+    }
+
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Log.d("duc1", "onResume1");
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        Log.d("duc1", "onAttack1");
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        Log.d("duc1", "onDestroyView1");
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        Log.d("duc1", "onDetach");
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Log.d("duc1", "onDestroy");
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        Log.d("duc1", "onSave1");
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        Log.d("duc1", "onCreate1");
+    }
+    //    @Override
 //    public void onPause() {
 //        super.onPause();
 //        if (getParentFragmentManager().findFragmentByTag(Util.TAG_HOME) != null)
@@ -332,6 +394,7 @@ private void callApiChannel(String id, ArrayList<VideoItem> video, int pos) {
         categoryId = "0";
         reloadData();;
     }
+
 
     private void reloadData() {
         currenPage = 1;

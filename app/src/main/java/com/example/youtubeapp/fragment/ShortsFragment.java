@@ -47,89 +47,100 @@ public class ShortsFragment extends Fragment {
     List<ExoPlayerItem> listItem;
     ViewPager2 vp2Video;
     MainActivity mainActivity;
+    ExoPlayer exoPlayerPause;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        Log.d("duc1", "onCreateView2");
         View view = inflater.inflate(R.layout.fragment_shorts, container, false);
-        vp2Video = view.findViewById(R.id.vp2_shorts_video);
-        mainActivity = (MainActivity) getActivity();
-        listItems = new ArrayList<>();
-        listItem = new ArrayList<>();
 
-        mainActivity.setToolBarMainInvisible();
+//        if(Util.CHECK_LOAD_SHORTS){
 
-        calLApiVideoShortRandom(pageToken, "20", null);
-        adapter = new ShortsVideoAdapter(getContext(), new OnVideoPreparedListener() {
-            @Override
-            public void onVideoPrepared(ExoPlayerItem exoPlayerItem) {
-                listItem.add(exoPlayerItem);
-            }
-        }, new IItemOnClickOpenCommentFromShortsVideo() {
-            @Override
-            public void onCLickOpenCommentShorts(String idVideo, String cmtCount) {
-                openBottomSheetDiaLogComment(idVideo, cmtCount);
-            }
-        });
+            vp2Video = view.findViewById(R.id.vp2_shorts_video);
+            mainActivity = (MainActivity) getActivity();
+            listItems = new ArrayList<>();
+            listItem = new ArrayList<>();
 
-        vp2Video.setAdapter(adapter);
-        adapter.setData(listItems);
-        vp2Video.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
-            @Override
-            public void onPageSelected(int position) {
-                int index = 0;
-                Iterator list = listItem.listIterator();
-                int var10000 = 0;
-                while(true) {
-                    if (!list.hasNext()) {
-                        var10000 = -1;
-                        break;
-                    }
-                    ExoPlayerItem item = (ExoPlayerItem) list.next();
-
-                    if (item.getExoPlayer().isPlaying()) {
-                        var10000 = index;
-                        break;
-                    }
-                    ++index;
+            calLApiVideoShortRandom(pageToken, "20", null);
+            adapter = new ShortsVideoAdapter(getContext(), new OnVideoPreparedListener() {
+                @Override
+                public void onVideoPrepared(ExoPlayerItem exoPlayerItem) {
+                    listItem.add(exoPlayerItem);
                 }
-                int previousIndex = var10000;
-                if (previousIndex != -1) {
-                    ExoPlayer player = listItem.get(previousIndex).getExoPlayer();
-                    player.pause();
-                    player.setPlayWhenReady(false);
+            }, new IItemOnClickOpenCommentFromShortsVideo() {
+                @Override
+                public void onCLickOpenCommentShorts(String idVideo, String cmtCount) {
+                    openBottomSheetDiaLogComment(idVideo, cmtCount);
                 }
-                int indexPos = 0;
-                Iterator var17 = listItem.listIterator();
-                while(true) {
-                    if (!var17.hasNext()) {
-                        var10000 = -1;
-                        break;
-                    }
-                    ExoPlayerItem item = (ExoPlayerItem) var17.next();
-                    if (item.getPosition() == position) {
-                        var10000 = indexPos;
-                        break;
-                    }
-                    ++indexPos;
-                }
+            });
 
-                int newIndex = var10000;
-                if (newIndex != -1) {
-                    mainActivity.tbHide();
-                    mainActivity.setToolBarMainInvisible();
-                    ExoPlayer playerx = listItem.get(newIndex).getExoPlayer();
-                    playerx.setPlayWhenReady(true);
-                    playerx.play();
+            vp2Video.setAdapter(adapter);
+            adapter.setData(listItems);
+            vp2Video.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
+                @Override
+                public void onPageSelected(int position) {
+                    int index = 0;
+                    Iterator list = listItem.listIterator();
+                    int var10000 = 0;
+                    while(true) {
+                        if (!list.hasNext()) {
+                            var10000 = -1;
+                            break;
+                        }
+                        ExoPlayerItem item = (ExoPlayerItem) list.next();
+                        if (item.getExoPlayer().isPlaying()) {
+                            var10000 = index;
+                            break;
+                        }
+                        ++index;
+                    }
+                    int previousIndex = var10000;
+                    if (previousIndex != -1) {
+                        ExoPlayer player = listItem.get(previousIndex).getExoPlayer();
+                        player.pause();
+                        player.setPlayWhenReady(false);
+                    }
+                    int indexPos = 0;
+                    Iterator var17 = listItem.listIterator();
+                    while(true) {
+                        if (!var17.hasNext()) {
+                            var10000 = -1;
+                            break;
+                        }
+                        ExoPlayerItem item = (ExoPlayerItem) var17.next();
+                        if (item.getPosition() == position) {
+                            var10000 = indexPos;
+                            break;
+                        }
+                        ++indexPos;
+                    }
+
+                    int newIndex = var10000;
+                    if (newIndex != -1) {
+                        // ẩn tb khi lướt lên
+//                        mainActivity.tbHide();
+//                        mainActivity.setToolBarMainInvisible();
+//                        mainActivity.setToolBarMainInvisible();
+//                        mainActivity.tbHide();
+                        ExoPlayer playerx = listItem.get(newIndex).getExoPlayer();
+                        playerx.setPlayWhenReady(true);
+                        playerx.play();
+
+                    }
                 }
-            }
-        });
+            });
+
+
         return view;
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        Log.d("duc1", "onPause");
+        Log.d("duc1", "onPause2");
+
+        mainActivity.setToolBarMainVisible();
+
         List $this$indexOfFirst$iv = (List) this.listItem;
         int index$iv = 0;
         Iterator var5 = $this$indexOfFirst$iv.iterator();
@@ -161,7 +172,11 @@ public class ShortsFragment extends Fragment {
 
     public void onResume() {
         super.onResume();
-        Log.d("duc1", "onResume");
+
+        mainActivity.setToolBarMainInvisible();
+        mainActivity.tbHide();
+
+        Log.d("duc1", "onResume2");
         int index$iv = 0;
         Iterator var5 = listItem.listIterator();
 
@@ -192,7 +207,7 @@ public class ShortsFragment extends Fragment {
     @Override
     public void onDetach() {
         super.onDetach();
-        Log.d("duc1", "onDetach");
+        Log.d("duc1", "onDetach2");
         Collection var1 = (Collection)this.listItem;
         if (!var1.isEmpty()) {
             Iterator var2 = this.listItem.iterator();
@@ -208,26 +223,27 @@ public class ShortsFragment extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        Log.d("duc1", "onDestroy");
+        Log.d("duc1", "onDestroy2");
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        Log.d("duc1", "onStop");
+        Log.d("duc1", "onStop2");
     }
 
     @Override
     public void onStart() {
         super.onStart();
-        Log.d("duc1", "onStart");
-    }
+        Log.d("duc1", "onStart2");
 
+
+    }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        Log.d("duc1", "onDestroyView");
+        Log.d("duc1", "onDestroyView2");
         Collection var1 = (Collection)this.listItem;
         if (!var1.isEmpty()) {
             Iterator var2 = this.listItem.iterator();
@@ -247,7 +263,7 @@ public class ShortsFragment extends Fragment {
                 "id",
                 null,
                 order,
-                "shorts",
+                "shorts vn",
                 "video",
                 "vn",
                 Util.API_KEY,

@@ -61,6 +61,7 @@ public class ChannelChannelsFragment extends Fragment implements SwipeRefreshLay
 //                openToChannel.putExtra(Util.EXTRA_ID_CHANNEL_TO_CHANNEL, idChannel);
 //                openToChannel.putExtra(Util.EXTRA_TITLE_CHANNEL_TO_CHANNEL, titleChannel);
 //                startActivity(openToChannel);
+                Util.FRAGMENT_CURRENT = 2;
                 mainActivity.addFragmentChannel(idChannel, titleChannel);
             }
         });
