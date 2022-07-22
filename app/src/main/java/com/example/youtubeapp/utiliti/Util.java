@@ -12,7 +12,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.Date;
 
 public class Util {
-    final public static String API_KEY = "AIzaSyCSuwO7CyFNsdZ39rV62QWmU-DTDBbbbq4";
+    final public static String API_KEY = "AIzaSyAB7ZJc0YdbzRP6AD-DA3gk9-tPvfnrBTI";
     public static int REQUEST_CODE_VIDEO = 123;
     public static int REQUEST_CODE_SORT_VIDEO = 111;
     public static String BUNDLE_EXTRA_OBJECT_ITEM_VIDEO = "extra item video";

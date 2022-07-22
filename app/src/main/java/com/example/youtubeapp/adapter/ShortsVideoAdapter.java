@@ -203,7 +203,6 @@ public class ShortsVideoAdapter extends RecyclerView.Adapter<ShortsVideoAdapter.
             playVideoYoutube(url);
 
             onVideoPreparedListener.onVideoPrepared(new ExoPlayerItem(exoPlayer, getAbsoluteAdapterPosition()));
-
         }
 
         @SuppressLint("StaticFieldLeak")

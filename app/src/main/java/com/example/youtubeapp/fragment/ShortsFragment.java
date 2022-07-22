@@ -126,6 +126,8 @@ public class ShortsFragment extends Fragment {
                         playerx.setPlayWhenReady(true);
                         playerx.play();
 
+                        Log.d("kkaakdad", newIndex+"");
+
                     }
                 }
             });
@@ -137,6 +139,7 @@ public class ShortsFragment extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
+
         Log.d("duc1", "onPause2");
 
         mainActivity.setToolBarMainVisible();
