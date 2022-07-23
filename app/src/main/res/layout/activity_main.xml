@@ -42,6 +42,9 @@
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         app:layout_anchorGravity="bottom">
 
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
             <FrameLayout
                 android:id="@+id/fl_content"
@@ -49,14 +52,17 @@
                 android:layout_height="match_parent"
                 android:visibility="visible"
                 android:layout_marginBottom="@dimen/_40sdp">
-
-                <androidx.viewpager2.widget.ViewPager2
-                    android:id="@+id/vp2_main"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:visibility="visible" />
-
             </FrameLayout>
+
+            <androidx.viewpager2.widget.ViewPager2
+                android:id="@+id/vp2_main"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="visible"
+                android:layout_marginBottom="@dimen/_40sdp"/>
+
+        </FrameLayout>
+
 
 
     </LinearLayout>

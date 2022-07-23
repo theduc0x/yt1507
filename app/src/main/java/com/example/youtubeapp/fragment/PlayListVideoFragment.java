@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -53,7 +54,7 @@ public class PlayListVideoFragment extends Fragment {
     LinearLayout llOpenVideo;
     MainActivity mainActivity;
 
-    private String pageToken = "";
+    private String pageToken;
     private boolean isLoading;
     private boolean isLastPage;
     private int totalPage = 5;
@@ -63,6 +64,7 @@ public class PlayListVideoFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_play_list_video, container, false);
+        pageToken = "";
         getData();
         initView(view);
         setData();
@@ -115,6 +117,7 @@ public class PlayListVideoFragment extends Fragment {
             public boolean onMenuItemClick(MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.mn_search_channel:
+                        Util.FRAGMENT_CURRENT  = 2;
                         mainActivity.addFragmentSearch("");
                 }
                 return false;

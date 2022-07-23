@@ -1,8 +1,12 @@
 package com.example.youtubeapp.fragment;
 
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.speech.RecognizerIntent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -42,6 +46,7 @@ import com.example.youtubeapp.my_interface.PaginationScrollListener;
 import com.example.youtubeapp.utiliti.Util;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -75,6 +80,8 @@ public class SearchResultsFragment extends Fragment implements IItemClickFilterS
         removeSearchFragment();
         getBundle();
         initView(view);
+
+
         LinearLayoutManager linearLayoutManager =
                 new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false);
         rvListSearch.setLayoutManager(linearLayoutManager);
@@ -87,6 +94,7 @@ public class SearchResultsFragment extends Fragment implements IItemClickFilterS
 //                openToChannel.putExtra(Util.EXTRA_ID_CHANNEL_TO_CHANNEL, idChannel);
 //                openToChannel.putExtra(Util.EXTRA_TITLE_CHANNEL_TO_CHANNEL, titleChannel);
 //                startActivity(openToChannel);
+                Util.FRAGMENT_CURRENT = 2;
                 mainActivity.addFragmentChannel(idChannel, titleChannel);
             }
             // Mở play list
@@ -99,6 +107,7 @@ public class SearchResultsFragment extends Fragment implements IItemClickFilterS
 //                bundle.putString(Util.EXTRA_KEY_ITEM_PLAYLIST, "Search");
 //                openToChannel.putExtras(bundle);
 //                startActivity(openToChannel);
+                Util.FRAGMENT_CURRENT = 2;
                 mainActivity.addFragmenPlayListVideo(null, item);
             }
             // Xem video
@@ -111,6 +120,7 @@ public class SearchResultsFragment extends Fragment implements IItemClickFilterS
 //                bundle.putString(Util.EXTRA_KEY_ITEM_VIDEO, "Search");
 //                toPlayVideo.putExtras(bundle);
 //                startActivity(toPlayVideo);
+                Util.FRAGMENT_CURRENT = 1;
                 mainActivity.setResetVideo();
                 mainActivity.setDataVideoPlay(item.getIdVideo(), null, item);
             }
@@ -141,6 +151,7 @@ public class SearchResultsFragment extends Fragment implements IItemClickFilterS
         ivOpenSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Util.FRAGMENT_CURRENT = 2;
                 mainActivity.addFragmentSearch("");
             }
         });
@@ -148,6 +159,7 @@ public class SearchResultsFragment extends Fragment implements IItemClickFilterS
         tvSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Util.FRAGMENT_CURRENT = 2;
                 mainActivity.addFragmentSearch(tvSearch.getText().toString());
             }
         });
@@ -165,9 +177,48 @@ public class SearchResultsFragment extends Fragment implements IItemClickFilterS
 //                mainActivity.setToolBarMainVisible();
             }
         });
+
+
+        PackageManager pm = requireContext().getPackageManager();
+        List<ResolveInfo> activities =
+                pm.queryIntentActivities(new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH), 0);
+        if (activities.size() == 0)
+        {
+//            speak.setEnabled(false);
+//            speak.setText("Recognizer not present");
+        }
+
         // sự kiện click toolbar filter
         tbFilter();
         return view;
+    }
+
+    //  voice search
+    private void startVoiceRecognitionActivity()
+    {
+        Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+        intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Voice searching...");
+        startActivityForResult(intent, Util.REQUEST_CODE_VIDEO);
+    }
+    /**
+     * Handle the results from the voice recognition activity.
+     */
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+        if (requestCode == Util.REQUEST_CODE_VIDEO && resultCode == -1)
+        {
+            // Populate the wordsList with the String values the recognition engine thought it heard
+            final ArrayList < String > matches = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+            if (!matches.isEmpty())
+            {
+                String Query = matches.get(0);
+                tvSearch.setText(Query);
+                mainActivity.addFragmentSearchResults(Query);
+            }
+        }
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     @Override
@@ -478,6 +529,9 @@ public class SearchResultsFragment extends Fragment implements IItemClickFilterS
                 switch (item.getItemId()) {
                     case R.id.mn_more_search:
                         openBottomSheetSearchFilter();
+                        break;
+                    case R.id.mn_voice_search_results:
+                        startVoiceRecognitionActivity();
                         break;
                 }
                 return false;

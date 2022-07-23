@@ -55,8 +55,59 @@ public class ShortsFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_shorts, container, false);
 
 //        if(Util.CHECK_LOAD_SHORTS){
+        vp2Video = view.findViewById(R.id.vp2_shorts_video);
 
-            vp2Video = view.findViewById(R.id.vp2_shorts_video);
+
+        return view;
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+
+        Log.d("duc1", "onPause2");
+
+        mainActivity.setToolBarMainVisible();
+
+        List indexOfFirst = (List) listItem;
+        int index$iv = 0;
+        Iterator var5 = indexOfFirst.iterator();
+
+        int var10000;
+        while (true) {
+            if (!var5.hasNext()) {
+                var10000 = -1;
+                break;
+            }
+            Object item$iv = var5.next();
+            ExoPlayerItem it = (ExoPlayerItem) item$iv;
+            var10000 = it.getPosition();
+            // Khi pause thì sẽ dừng tất cả
+            if (it.getExoPlayer().isPlaying() || it.getExoPlayer().isLoading()) {
+                ExoPlayer player = it.getExoPlayer();
+                player.pause();
+                player.setPlayWhenReady(false);
+            }
+
+            if (var10000 == vp2Video.getCurrentItem()) {
+                var10000 = index$iv;
+                break;
+            }
+            ++index$iv;
+        }
+        // Dừng video hiện tại
+        int index = var10000;
+        if (index != -1) {
+            ExoPlayer player = listItem.get(index).getExoPlayer();
+            player.pause();
+            player.setPlayWhenReady(false);
+        }
+    }
+
+    public void onResume() {
+        super.onResume();
+
+        if (Util.CHECK_LOAD_SHORTS) {
             mainActivity = (MainActivity) getActivity();
             listItems = new ArrayList<>();
             listItem = new ArrayList<>();
@@ -79,6 +130,7 @@ public class ShortsFragment extends Fragment {
             vp2Video.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
                 @Override
                 public void onPageSelected(int position) {
+                    // Tắt khi lướt lên xuống
                     int index = 0;
                     Iterator list = listItem.listIterator();
                     int var10000 = 0;
@@ -100,6 +152,38 @@ public class ShortsFragment extends Fragment {
                         player.pause();
                         player.setPlayWhenReady(false);
                     }
+
+                    ////    Nếu đang loading thì cũng tắt
+
+                    // Stop khi đang load
+                    int indexLoad = 0;
+                    Iterator listLoad = listItem.listIterator();
+                    int var1000 = 0;
+                    while(true) {
+                        if (!listLoad.hasNext()) {
+                            var1000 = -1;
+                            break;
+                        }
+                        ExoPlayerItem item = (ExoPlayerItem) listLoad.next();
+
+                        if (item.getExoPlayer().isLoading() && item.getExoPlayer() != null) {
+                            var1000 = indexLoad;
+                            break;
+                        }
+
+                        ++indexLoad;
+                    }
+
+                    int previousIndexx = var1000;
+                    if (previousIndexx != -1) {
+                        ExoPlayer player = listItem.get(previousIndexx).getExoPlayer();
+                        player.pause();
+                        player.setPlayWhenReady(false);
+                    }
+
+
+
+                    // Khi lướt thì play video tiếp
                     int indexPos = 0;
                     Iterator var17 = listItem.listIterator();
                     while(true) {
@@ -118,8 +202,8 @@ public class ShortsFragment extends Fragment {
                     int newIndex = var10000;
                     if (newIndex != -1) {
                         // ẩn tb khi lướt lên
-//                        mainActivity.tbHide();
-//                        mainActivity.setToolBarMainInvisible();
+                        mainActivity.tbHide();
+                        mainActivity.setToolBarMainInvisible();
 //                        mainActivity.setToolBarMainInvisible();
 //                        mainActivity.tbHide();
                         ExoPlayer playerx = listItem.get(newIndex).getExoPlayer();
@@ -131,50 +215,7 @@ public class ShortsFragment extends Fragment {
                     }
                 }
             });
-
-
-        return view;
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-
-        Log.d("duc1", "onPause2");
-
-        mainActivity.setToolBarMainVisible();
-
-        List $this$indexOfFirst$iv = (List) this.listItem;
-        int index$iv = 0;
-        Iterator var5 = $this$indexOfFirst$iv.iterator();
-
-        int var10000;
-        while (true) {
-            if (!var5.hasNext()) {
-                var10000 = -1;
-                break;
-            }
-            Object item$iv = var5.next();
-            ExoPlayerItem it = (ExoPlayerItem) item$iv;
-            var10000 = it.getPosition();
-
-            if (var10000 == vp2Video.getCurrentItem()) {
-                var10000 = index$iv;
-                break;
-            }
-            ++index$iv;
         }
-
-        int index = var10000;
-        if (index != -1) {
-            ExoPlayer player = ((ExoPlayerItem) this.listItem.get(index)).getExoPlayer();
-            player.pause();
-            player.setPlayWhenReady(false);
-        }
-    }
-
-    public void onResume() {
-        super.onResume();
 
         mainActivity.setToolBarMainInvisible();
         mainActivity.tbHide();
@@ -201,7 +242,7 @@ public class ShortsFragment extends Fragment {
 
         int index = var10000;
         if (index != -1) {
-            ExoPlayer player = ((ExoPlayerItem) this.listItem.get(index)).getExoPlayer();
+            ExoPlayer player = listItem.get(index).getExoPlayer();
             player.setPlayWhenReady(true);
             player.play();
         }

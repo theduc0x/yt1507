@@ -12,7 +12,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.Date;
 
 public class Util {
-    final public static String API_KEY = "AIzaSyAB7ZJc0YdbzRP6AD-DA3gk9-tPvfnrBTI";
+    final public static String API_KEY = "AIzaSyADTKZUF1piddawbSUK123mGl0iEOFXzFc";
     public static int REQUEST_CODE_VIDEO = 123;
     public static int REQUEST_CODE_SORT_VIDEO = 111;
     public static String BUNDLE_EXTRA_OBJECT_ITEM_VIDEO = "extra item video";
@@ -48,6 +48,7 @@ public class Util {
 
     public static int FRAGMENT_CURRENT = 0;
     public static boolean CHECK_LOAD_SHORTS = false;
+    public static int NUMBER_CHECK_LOAD_SHORTS = 0;
 
     public static final int VIEW_TYPE_ITEM = 0, VIEW_TYPE_LOADING = 1;
 //  Chuyển đổi từ lượt view double sang K và M

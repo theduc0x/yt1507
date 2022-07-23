@@ -52,8 +52,6 @@ public class ChannelFragment extends Fragment {
                     mainActivity.setToolBarMainVisible();
                 }
 
-
-
 //                mainActivity.onBackPressed();
             }
         });

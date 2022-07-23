@@ -49,6 +49,8 @@ import com.google.android.youtube.player.YouTubeInitializationResult;
 import com.google.android.youtube.player.YouTubePlayer;
 import com.google.android.youtube.player.YouTubePlayerFragment;
 
+import java.util.ArrayList;
+
 public class MainActivity extends AppCompatActivity implements YouTubePlayer.OnInitializedListener {
     Toolbar tbNav;
     BottomNavigationView bnvFragment;
@@ -69,6 +71,8 @@ public class MainActivity extends AppCompatActivity implements YouTubePlayer.OnI
     TextView tvTitleVideo, tvTitleChannel;
     ImageView ivDelete;
     String titleVideo = "", titleChannel = "";
+
+    ArrayList<Fragment> listFragment;
 
     ConstraintLayout clVideoPlay;
     BottomSheetBehavior sheetBehavior;
@@ -95,11 +99,18 @@ public class MainActivity extends AppCompatActivity implements YouTubePlayer.OnI
         tvTitleVideo = findViewById(R.id.tv_title_video_resize);
         ivDelete = findViewById(R.id.iv_delete_resize);
 
+
+
+        listFragment = new ArrayList<>();
+
         bnvFragment.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.mn_home:
+                        flContent.setVisibility(View.GONE);
+                        deleteBackStackFrameLayout();
+                        setToolBarMainVisible();
                         vp2Main.setCurrentItem(0,false);
                         if (vp2Main.getCurrentItem() == 0) {
                             if (item.isChecked()) {
@@ -113,44 +124,38 @@ public class MainActivity extends AppCompatActivity implements YouTubePlayer.OnI
                         }
                         break;
                     case R.id.mn_explore:
-                        Util.CHECK_LOAD_SHORTS = true;
-
+                        flContent.setVisibility(View.GONE);
+                        // Xóa backstack có trên FrameLayout
+                        deleteBackStackFrameLayout();
+                        // Nếu  = 0 thì sẽ chỉ load 1 lần shorts fragment do
+                        // viewPager2 tự động load trước, nếu không chặn lại thì sẽ phát tự động
+                        if (Util.NUMBER_CHECK_LOAD_SHORTS == 0) {
+                            Util.CHECK_LOAD_SHORTS = true;
+                            Util.NUMBER_CHECK_LOAD_SHORTS = 1 ;
+                        } else {
+                            Util.CHECK_LOAD_SHORTS = false;
+                        }
                         vp2Main.setCurrentItem(1,false);
                         Log.d("aaaaaaaaaaaa", "skada");
 
                         break;
                     case R.id.mn_subcription:
                         setToolBarMainVisible();
-//                        ChannelFragment channelFragment =
-//                                (ChannelFragment) getSupportFragmentManager()
-//                                        .findFragmentByTag(Util.TAG_CHANNEL);
-//                        PlayListVideoFragment listVideoFragment =
-//                                (PlayListVideoFragment) getSupportFragmentManager()
-//                                        .findFragmentByTag(Util.TAG_PLAYLIST_DETAIL);
-//                        SearchResultsFragment resultsFragment =
-//                                (SearchResultsFragment) getSupportFragmentManager()
-//                                        .findFragmentByTag(Util.TAG_RESULTS_SEARCH);
-//                        if (listVideoFragment != null && listVideoFragment.isVisible()) {
-//                            getSupportFragmentManager().popBackStack();
-//                            onBackPressed();
-//                        }
-//                        if (channelFragment != null && channelFragment.isVisible()) {
-//                            onBackPressed();
-//                        }
-//                        if (resultsFragment != null && resultsFragment.isVisible()) {
-//                            getSupportFragmentManager().popBackStack();
-//                            onBackPressed();
-//                        }
-
+                        flContent.setVisibility(View.GONE);
+                        deleteBackStackFrameLayout();
                         Log.d("dfafasas", "co");
                         vp2Main.setCurrentItem(2,false);
                         break;
                     case R.id.mn_notification:
                         setToolBarMainVisible();
+                        flContent.setVisibility(View.GONE);
+                        deleteBackStackFrameLayout();
                         vp2Main.setCurrentItem(3,false);
                         break;
                     case R.id.mn_library:
                         setToolBarMainVisible();
+                        flContent.setVisibility(View.GONE);
+                        deleteBackStackFrameLayout();
                         vp2Main.setCurrentItem(4,false);
                         break;
                 }
@@ -209,6 +214,23 @@ public class MainActivity extends AppCompatActivity implements YouTubePlayer.OnI
             }
         });
     }
+    // Hiển thị FrameLayout chứa các fragment và set Elevation cao để hiển thị lên trên viewpager
+    private void setFlContentVisible() {
+        flContent.setVisibility(View.VISIBLE);
+        flContent.setElevation(40);
+    }
+    // Xóa các backstack đã lưu trong list, làm mới lại FrameLayout
+    private void deleteBackStackFrameLayout() {
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        if (listFragment != null) {
+            for (Fragment fragment : listFragment) {
+                ft.remove(fragment);
+            }
+            ft.commit();
+            listFragment = new ArrayList<>();
+        }
+    }
+
 
     private void setupViewPager(ViewPager2 viewPager2) {
         ViewPagerMainAdapter adapter =
@@ -235,6 +257,7 @@ public class MainActivity extends AppCompatActivity implements YouTubePlayer.OnI
 
     // add phần tìm kiếm
     public void addFragmentSearch(String s) {
+        setFlContentVisible();
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         setToolBarMainInvisible();
         bnvFragment.setVisibility(View.GONE);
@@ -244,11 +267,13 @@ public class MainActivity extends AppCompatActivity implements YouTubePlayer.OnI
         searchFragment.setArguments(bundle);
         fragmentTransaction.replace(R.id.fl_content, searchFragment, Util.TAG_SEARCH);
         fragmentTransaction.addToBackStack(SearchFragment.TAG);
+        listFragment.add(searchFragment);
         fragmentTransaction.commit();
     }
 
     // open fragment channel
     public void addFragmentChannel(String idChannel, String titleChannel) {
+        setFlContentVisible();
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         ablHome.setVisibility(View.VISIBLE);
         tbDisPlay();
@@ -260,6 +285,7 @@ public class MainActivity extends AppCompatActivity implements YouTubePlayer.OnI
         channelFragment.setArguments(bundle);
         fragmentTransaction.replace(R.id.fl_content, channelFragment, Util.TAG_CHANNEL);
         fragmentTransaction.addToBackStack(ChannelFragment.TAG);
+        listFragment.add(channelFragment);
         fragmentTransaction.commit();
     }
 
@@ -282,6 +308,7 @@ public class MainActivity extends AppCompatActivity implements YouTubePlayer.OnI
 
     // Add thêm kết quả của việc search vào main
     public void addFragmentSearchResults(String q) {
+        setFlContentVisible();
         bnvFragment.setVisibility(View.VISIBLE);
         SearchResultsFragment searchResultsFragment = new SearchResultsFragment();
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
@@ -290,6 +317,7 @@ public class MainActivity extends AppCompatActivity implements YouTubePlayer.OnI
         searchResultsFragment.setArguments(bundle);
         fragmentTransaction.replace(R.id.fl_content, searchResultsFragment, Util.TAG_RESULTS_SEARCH);
         fragmentTransaction.addToBackStack(SearchResultsFragment.TAG);
+        listFragment.add(searchResultsFragment);
         fragmentTransaction.commit();
     }
 
@@ -458,6 +486,7 @@ public class MainActivity extends AppCompatActivity implements YouTubePlayer.OnI
     }
 
     private void addFragmentMain(VideoItem itemVideo, SearchItem itemVideoS) {
+        setFlContentVisible();
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
         VideoContainDataFragment videoContainDataFragment = new VideoContainDataFragment();
@@ -486,6 +515,7 @@ public class MainActivity extends AppCompatActivity implements YouTubePlayer.OnI
 
     // Add play list
     public void addFragmenPlayListVideo(PlayListItem itemPlayList, SearchItem itemVideoS) {
+        setFlContentVisible();
         PlayListVideoFragment PlayListVideoFragment = new PlayListVideoFragment();
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         Bundle bundle = new Bundle();
@@ -501,6 +531,7 @@ public class MainActivity extends AppCompatActivity implements YouTubePlayer.OnI
         PlayListVideoFragment.setArguments(bundle);
         fragmentTransaction.replace(R.id.fl_content, PlayListVideoFragment, Util.TAG_PLAYLIST_DETAIL);
         fragmentTransaction.addToBackStack(com.example.youtubeapp.fragment.PlayListVideoFragment.TAG);
+        listFragment.add(PlayListVideoFragment);
         fragmentTransaction.commit();
 
         Log.d("sadjdaksa", getSupportFragmentManager().getBackStackEntryCount()+"");

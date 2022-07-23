@@ -30,6 +30,7 @@ tools:context=".fragment.BottomSheetDialogSearchSelect">
         android:layout_height="match_parent"
         android:paddingStart="@dimen/_16sdp"
         android:gravity="center_vertical"
+        android:textSize="@dimen/_12sdp"
         android:textColor="@color/black"
         android:text="Search Filter"/>
 </LinearLayout>
@@ -59,6 +60,7 @@ tools:context=".fragment.BottomSheetDialogSearchSelect">
         android:paddingStart="@dimen/_16sdp"
         android:gravity="center_vertical"
         android:textColor="@color/black"
+        android:textSize="@dimen/_12sdp"
         android:text="Help and Feedback"/>
 </LinearLayout>
 
@@ -92,6 +94,7 @@ tools:context=".fragment.BottomSheetDialogSearchSelect">
         android:paddingStart="@dimen/_16sdp"
         android:gravity="center_vertical"
         android:textColor="@color/black"
+        android:textSize="@dimen/_12sdp"
         android:text="Cancel"/>
 </LinearLayout>
 

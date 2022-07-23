@@ -249,8 +249,9 @@ public class BottomSheetDialogCommentFragment extends BottomSheetDialogFragment 
 
                 Comment comment = response.body();
                 if (comment != null) {
-                    pageToken = comment.getNextPageToken();
-                    Log.d("pageToken", pageToken);
+                    if (comment.getNextPageToken() != null) {
+                        pageToken = comment.getNextPageToken();
+                    }
                     ArrayList<ItemsComment> listItem = comment.getItems();
                     for (int i = 0; i < listItem.size(); i++) {
                         idComment = listItem.get(i).getId();

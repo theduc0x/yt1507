@@ -2,32 +2,29 @@ package com.example.youtubeapp.fragment;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.os.SystemClock;
+import android.speech.RecognizerIntent;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -38,7 +35,6 @@ import com.android.volley.toolbox.Volley;
 import com.example.youtubeapp.R;
 import com.example.youtubeapp.activitys.MainActivity;
 import com.example.youtubeapp.adapter.HintAdapter;
-import com.example.youtubeapp.api.ApiServiceHintSearch;
 import com.example.youtubeapp.my_interface.IItemOnClickHintListener;
 import com.example.youtubeapp.my_interface.IItemOnClickSearchListener;
 import com.example.youtubeapp.utiliti.Util;
@@ -47,12 +43,11 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 import java.util.ArrayList;
-
-import retrofit2.Call;
-import retrofit2.Callback;
+import java.util.List;
 
 public class SearchFragment extends Fragment {
     public static final String TAG = SearchFragment.class.getName();
+    public static int REQUEST_CODE = 1233;
     private ImageButton ibBack;
     String how;
     EditText etSearch;
@@ -91,6 +86,15 @@ public class SearchFragment extends Fragment {
         });
         rvListHint.setAdapter(adapter);
         adapter.setData(listHint);
+
+        PackageManager pm = requireContext().getPackageManager();
+        List<ResolveInfo> activities = pm.queryIntentActivities(new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH), 0);
+        if (activities.size() == 0)
+        {
+//            speak.setEnabled(false);
+//            speak.setText("Recognizer not present");
+        }
+
         etSearch.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -139,11 +143,43 @@ public class SearchFragment extends Fragment {
                 switch (item.getItemId()) {
                     case R.id.mn_close_search:
                         etSearch.setText("");
+                        break;
+                    case R.id.mn_voice_search:
+                        startVoiceRecognitionActivity();
+                        break;
                 }
                 return false;
             }
         });
+
         return view;
+    }
+//  voice search
+    private void startVoiceRecognitionActivity()
+    {
+        Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+        intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Voice searching...");
+        startActivityForResult(intent, REQUEST_CODE);
+    }
+    /**
+     * Handle the results from the voice recognition activity.
+     */
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+        if (requestCode == REQUEST_CODE && resultCode == -1)
+        {
+            // Populate the wordsList with the String values the recognition engine thought it heard
+            final ArrayList < String > matches = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+            if (!matches.isEmpty())
+            {
+                String Query = matches.get(0);
+                etSearch.setText(Query);
+                mainActivity.addFragmentSearchResults(Query);
+            }
+        }
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     @Override
@@ -210,6 +246,7 @@ public class SearchFragment extends Fragment {
                     if (Util.FRAGMENT_CURRENT == 1) {
                         mainActivity.setToolBarMainVisible();
                     }
+                    mainActivity.setBnvVisible();
             }
         });
     }

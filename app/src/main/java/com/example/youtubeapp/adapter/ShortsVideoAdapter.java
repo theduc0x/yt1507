@@ -198,7 +198,6 @@ public class ShortsVideoAdapter extends RecyclerView.Adapter<ShortsVideoAdapter.
                     }
                 }
             });
-
             spvVideo.setPlayer(exoPlayer);
             playVideoYoutube(url);
 
@@ -236,8 +235,6 @@ public class ShortsVideoAdapter extends RecyclerView.Adapter<ShortsVideoAdapter.
                             videoUrl = ytFiles.get(137).getUrl();
                         }
 
-                        DefaultDataSource.Factory dataSource =
-                                new DefaultDataSource.Factory(context);
                         mediaSourceAudio = new ProgressiveMediaSource.Factory(
                                 new DefaultDataSource.Factory(context)).createMediaSource(
                                 MediaItem.fromUri(videoUrl));
@@ -264,8 +261,24 @@ public class ShortsVideoAdapter extends RecyclerView.Adapter<ShortsVideoAdapter.
             }.extract(youtubeUrl);
         }
     }
+    // Khi không nhìn thấy view thì sẽ pause video
+    @Override
+    public void onViewDetachedFromWindow(@NonNull ShortsViewHolder holder) {
+        super.onViewDetachedFromWindow(holder);
+        if (holder.exoPlayer != null) {
+            holder.exoPlayer.pause();
+        }
 
     }
+    // Khi nhìn lại view thì lại phát video
+    @Override
+    public void onViewAttachedToWindow(@NonNull ShortsViewHolder holder) {
+        super.onViewAttachedToWindow(holder);
+        if (holder.exoPlayer != null) {
+            holder.exoPlayer.play();
+        }
+    }
+}
 
 
 

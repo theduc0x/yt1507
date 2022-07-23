@@ -75,6 +75,7 @@ public class ChannelPlayListFragment extends Fragment {
 //                bundle.putString(Util.EXTRA_KEY_ITEM_PLAYLIST, "Channel");
 //                openToChannel.putExtras(bundle);
 //                startActivity(openToChannel);
+                Util.FRAGMENT_CURRENT = 2;
                 mainActivity.addFragmenPlayListVideo(item, null);
             }
         });

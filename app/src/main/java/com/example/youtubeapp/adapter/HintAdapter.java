@@ -79,7 +79,7 @@ public class HintAdapter extends RecyclerView.Adapter<HintAdapter.HintViewHolder
             super(itemView);
             tvHintSearch = itemView.findViewById(R.id.tv_hint_search);
             ibGetHint = itemView.findViewById(R.id.ib_get_hint);
-            llOpenSearch = itemView.findViewById(R.id.ll_open_search);
+            llOpenSearch = itemView.findViewById(R.id.ll_open_search_hint);
         }
     }
 }
