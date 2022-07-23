@@ -51,10 +51,10 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@id/nsv_scroll_group"
-            android:layout_marginTop="@dimen/_8sdp">
+            android:layout_marginTop="@dimen/_8sdp"
+            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/tv_title_video_desc"
@@ -89,10 +89,10 @@
                     android:layout_height="match_parent"
                     android:layout_marginStart="@dimen/_5sdp"
                     android:gravity="center_vertical"
-                    android:text="Tincoder Android Java"
                     android:fontFamily="@font/roboto_black"
                     android:textColor="@color/black"
-                    android:textSize="@dimen/_10sdp" />
+                    android:textSize="@dimen/_10sdp"
+                    android:text="Tincoder Android Java"/>
 
             </LinearLayout>
 
@@ -119,16 +119,16 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textSize="@dimen/_12sdp"
-                        android:text="2.1 N"
                         android:textColor="@color/black"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"
+                        android:text="2.1 N"/>
 
                     <TextView
                         android:id="@+id/tv_name_like"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Lượt thích"
-                        android:textSize="@dimen/_10sdp" />
+                        android:textSize="@dimen/_10sdp"
+                        android:text="Lượt thích"/>
                 </LinearLayout>
 
                 <LinearLayout
@@ -142,17 +142,17 @@
                         android:id="@+id/tv_view_video_desc"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="51.072"
                         android:textSize="@dimen/_12sdp"
                         android:textColor="@color/black"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"
+                        android:text="51.072"/>
 
                     <TextView
                         android:id="@+id/tv_name_view_desc"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Lượt xem"
-                        android:textSize="@dimen/_10sdp" />
+                        android:textSize="@dimen/_10sdp"
+                        android:text="Lượt xem"/>
                 </LinearLayout>
 
                 <LinearLayout

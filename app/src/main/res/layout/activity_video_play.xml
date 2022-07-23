@@ -46,8 +46,8 @@
             android:id="@+id/ll_resize2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
             android:layout_marginStart="@dimen/_10sdp"
+            android:orientation="vertical"
             android:visibility="gone">
             <TextView
                 android:id="@+id/tv_title_video_resize"

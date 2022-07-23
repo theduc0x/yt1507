@@ -50,16 +50,18 @@
                 android:id="@+id/fl_content"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_marginBottom="@dimen/_40sdp"
                 android:visibility="visible"
-                android:layout_marginBottom="@dimen/_40sdp">
+              >
             </FrameLayout>
 
             <androidx.viewpager2.widget.ViewPager2
                 android:id="@+id/vp2_main"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_marginBottom="@dimen/_40sdp"
                 android:visibility="visible"
-                android:layout_marginBottom="@dimen/_40sdp"/>
+                />
 
         </FrameLayout>
 
