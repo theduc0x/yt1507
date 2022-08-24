@@ -69,6 +69,7 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
                              Bundle savedInstanceState) {
         Log.d("duck", "onCreateView");
         View view = inflater.inflate(R.layout.fragment_home, container, false);
+        // Hello
         listVideoItem = new ArrayList<>();
         rvItemVideo = view.findViewById(R.id.rv_item_video);
         srlReloadData = view.findViewById(R.id.srl_reload);
